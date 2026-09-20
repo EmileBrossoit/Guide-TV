@@ -1548,7 +1548,7 @@
         📺 Grille Horaire TV (15 Chaînes)
       </button>
       <button class="page-nav-btn" id="tab-nav-events" onclick="selectPageTab('events')">
-        🏆 Vrais Matchs en Direct & Aujourd'hui <span class="badge-count-pill" id="events-total-badge">Chargement...</span>
+        🏆 Matchs en direct et à venir <span class="badge-count-pill" id="events-total-badge">Chargement...</span>
       </button>
     </div>
 
@@ -2409,15 +2409,30 @@
         return a.timeDiff - b.timeDiff;
       });
 
-      const uniqueNames = [...new Set(candidateChannels.map(c => c.name))];
-      const primary = candidateChannels[0];
+      const uniqueChannels = [];
+      const seenIds = new Set();
+      for (const cand of candidateChannels) {
+        if (!seenIds.has(cand.id)) {
+          seenIds.add(cand.id);
+          uniqueChannels.push({
+            id: cand.id,
+            name: cand.name,
+            directUrl: cand.directUrl,
+            network: cand.network,
+            isLive: cand.isLive
+          });
+        }
+      }
+
+      const primary = uniqueChannels[0];
 
       return {
         hasChannel: true,
         channelId: primary.id,
         channelName: primary.name,
         channelUrl: primary.directUrl,
-        allChannelsSummary: uniqueNames.length > 1 ? uniqueNames.slice(0, 2).join(' / ') : primary.name,
+        channels: uniqueChannels,
+        allChannelsSummary: uniqueChannels.map(c => c.name).join(' / '),
         isLiveBroadcast: primary.isLive
       };
     }
@@ -2552,6 +2567,7 @@
                 broadcastChannelId: broadcastInfo?.channelId || '',
                 broadcastChannelName: broadcastInfo?.channelName || 'Non diffusé',
                 broadcastChannelUrl: broadcastInfo?.channelUrl || null,
+                broadcastChannels: broadcastInfo?.channels || (broadcastInfo?.channelName ? [{ id: broadcastInfo.channelId, name: broadcastInfo.channelName, directUrl: broadcastInfo.channelUrl }] : []),
                 broadcastChannelSummary: broadcastInfo?.allChannelsSummary || 'Non disponible au guide'
               });
             });
@@ -2591,11 +2607,28 @@
       renderRealEvents();
     }
 
-    function openLivePlayerForMatch(matchId) {
+    function openLivePlayerForMatchChannel(matchId, channelId) {
       const m = realMatchesData.find(x => String(x.id) === String(matchId));
       if (!m) return;
       const gameTitle = m.teams || `${m.awayTeam} vs ${m.homeTeam}`;
-      openLivePlayer(m.broadcastChannelId || '', m.broadcastChannelName, m.broadcastChannelUrl, gameTitle);
+
+      let chosen = null;
+      if (channelId && m.broadcastChannels && m.broadcastChannels.length > 0) {
+        chosen = m.broadcastChannels.find(c => c.id === channelId);
+      }
+      if (!chosen && channelId) {
+        chosen = SPORTS_CHANNELS.find(c => c.id === channelId);
+      }
+
+      if (chosen) {
+        openLivePlayer(chosen.id, chosen.name, chosen.directUrl, gameTitle);
+      } else {
+        openLivePlayer(m.broadcastChannelId || '', m.broadcastChannelName, m.broadcastChannelUrl, gameTitle);
+      }
+    }
+
+    function openLivePlayerForMatch(matchId) {
+      openLivePlayerForMatchChannel(matchId, null);
     }
 
     function renderRealEvents() {
@@ -2614,6 +2647,7 @@
             (m.teams && m.teams.toLowerCase().includes(query)) ||
             (m.broadcastChannelSummary && m.broadcastChannelSummary.toLowerCase().includes(query)) ||
             (m.broadcastChannelName && m.broadcastChannelName.toLowerCase().includes(query)) ||
+            (m.broadcastChannels && m.broadcastChannels.some(c => c.name.toLowerCase().includes(query))) ||
             (m.venue && m.venue.toLowerCase().includes(query));
           return matchesSport && matchesDay && matchesState && matchesSearch;
         });
@@ -2640,7 +2674,17 @@
           if (m.hasBroadcastChannel) {
             // La partie est diffusée sur une chaîne locale vérifiée
             if ((hasReachedMatchTime || isLive) && !isFinal) {
-              // Rendu à l'heure du match -> Bouton Regarder ACTIF
+              // Rendu à l'heure du match -> Bouton(s) Regarder ACTIF(S) pour chaque poste
+              const channels = (m.broadcastChannels && m.broadcastChannels.length > 0)
+                ? m.broadcastChannels
+                : [{ id: m.broadcastChannelId, name: m.broadcastChannelName, directUrl: m.broadcastChannelUrl }];
+
+              const buttonsHtml = channels.map(ch => `
+                <button onclick="openLivePlayerForMatchChannel('${m.id}', '${ch.id || ''}')" class="match-action-btn">
+                  <span>▶ Regarder sur ${ch.name}</span>
+                </button>
+              `).join('');
+
               footerContent = `
                 <div class="match-footer">
                   <div class="broadcast-badge">
@@ -2648,9 +2692,9 @@
                     <span class="channel-pill-tag">${m.broadcastChannelSummary}</span>
                   </div>
 
-                  <button onclick="openLivePlayerForMatch('${m.id}')" class="match-action-btn">
-                    <span>▶ Regarder sur ${m.broadcastChannelName}</span>
-                  </button>
+                  <div class="match-actions-group" style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    ${buttonsHtml}
+                  </div>
                 </div>
               `;
             } else if (isFinal) {
