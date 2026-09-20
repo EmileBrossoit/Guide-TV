@@ -1,0 +1,2759 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guide TV Sports & Vrais Matchs en Direct - QC & Canada</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-base: #06090e;
+      --bg-card: rgba(16, 22, 35, 0.85);
+      --bg-card-hover: rgba(24, 34, 54, 0.95);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-highlight: rgba(239, 68, 68, 0.4);
+      
+      --accent-rds: #ef4444;
+      --accent-tva: #2563eb;
+      --accent-sn: #0284c7;
+      --accent-tsn: #dc2626;
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      
+      --slot-width-30min: 150px;
+      --channel-col-width: 320px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at 10% 0%, #151b2e 0%, #06090e 50%, #020407 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 60px;
+    }
+
+    .ambient-glow {
+      position: fixed;
+      width: 650px;
+      height: 650px;
+      border-radius: 50%;
+      filter: blur(150px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.22;
+    }
+    .glow-1 { top: -120px; right: 0; background: #dc2626; }
+    .glow-2 { bottom: 5%; left: -100px; background: #1d4ed8; }
+
+    .app-container {
+      position: relative;
+      z-index: 1;
+      max-width: 1540px;
+      margin: 0 auto;
+      padding: 20px 24px;
+    }
+
+    /* Top Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 20px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-icon {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, #ef4444, #1e40af);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 8px 24px rgba(239, 68, 68, 0.35);
+    }
+
+    .brand-text h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-text p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #22c55e;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.5; }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .time-badge {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      backdrop-filter: blur(10px);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Main Page Navigation */
+    .page-nav-tabs {
+      display: flex;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      padding: 5px;
+      border-radius: 14px;
+      gap: 6px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(12px);
+    }
+
+    .page-nav-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .page-nav-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .page-nav-btn.active {
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
+    }
+
+    .badge-count-pill {
+      background: rgba(0, 0, 0, 0.35);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    /* Controls Panel */
+    .controls-panel {
+      background: rgba(15, 21, 33, 0.65);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 16px 20px;
+      backdrop-filter: blur(16px);
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .controls-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .search-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 280px;
+      max-width: 500px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 11px 16px 11px 42px;
+      color: #fff;
+      font-size: 0.92rem;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--border-highlight);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-dim);
+    }
+
+    .time-jumpers {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .time-jumper-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .time-jumper-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .time-jumper-btn.now-btn {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+    }
+    .time-jumper-btn.now-btn:hover {
+      background: rgba(239, 68, 68, 0.35);
+      color: #fff;
+    }
+
+    .category-pills {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    .pill.active {
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+    }
+
+    .channels-count {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-left: auto;
+    }
+
+    /* ========================================================
+       GUIDE TV GRID (STYLE TV PASSPORT)
+       ======================================================== */
+    .epg-grid-container {
+      background: rgba(13, 18, 30, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: row;
+      position: relative;
+    }
+
+    /* COLONNE GAUCHE STRICTEMENT FIXE (Chaînes, logos et noms - JAMAIS déplacée au scroll) */
+    .epg-channels-column {
+      width: var(--channel-col-width);
+      min-width: var(--channel-col-width);
+      max-width: var(--channel-col-width);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      background: #0d131f;
+      border-right: 1px solid var(--border-subtle);
+      z-index: 12;
+      box-shadow: 6px 0 18px rgba(0, 0, 0, 0.45);
+    }
+
+    .epg-channel-header-cell {
+      height: 48px;
+      min-height: 48px;
+      max-height: 48px;
+      box-sizing: border-box;
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 0.88rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border-subtle);
+      background: #0e1422;
+    }
+
+    .epg-channels-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .channel-cell {
+      height: 94px;
+      min-height: 94px;
+      max-height: 94px;
+      box-sizing: border-box;
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      background: #0d131f;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      transition: background 0.15s ease;
+    }
+
+    .channel-cell:hover,
+    .channel-cell.is-hovered {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    /* ZONE DROITE DÉFILANTE HORIZONTALEMENT (Timeline & Émissions) */
+    .grid-viewport-wrapper {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    .epg-timeline-ruler {
+      height: 48px;
+      min-height: 48px;
+      max-height: 48px;
+      box-sizing: border-box;
+      display: flex;
+      position: relative;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(19, 27, 44, 0.98);
+      width: max-content;
+    }
+
+    .time-slot-header {
+      width: var(--slot-width-30min);
+      min-width: var(--slot-width-30min);
+      height: 100%;
+      box-sizing: border-box;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #94a3b8;
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: left;
+    }
+
+    .epg-shows-container {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      width: max-content;
+    }
+
+    .shows-track {
+      height: 94px;
+      min-height: 94px;
+      max-height: 94px;
+      box-sizing: border-box;
+      display: flex;
+      position: relative;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      transition: background 0.15s ease;
+      width: max-content;
+    }
+
+    .shows-track:hover,
+    .shows-track.is-hovered {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .current-time-marker {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #ef4444;
+      box-shadow: 0 0 14px #ef4444;
+      z-index: 15;
+      pointer-events: none;
+    }
+    .current-time-marker::after {
+      content: 'EN DIRECT';
+      position: absolute;
+      top: 10px;
+      left: -32px;
+      background: #ef4444;
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.04em;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.6);
+    }
+
+    .channel-info-block {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      min-width: 0;
+      overflow: visible;
+    }
+
+    .channel-logo-wrapper {
+      width: 48px;
+      height: 42px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 9px;
+      padding: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      transition: transform 0.2s;
+    }
+
+    .channel-logo-wrapper:hover {
+      transform: scale(1.05) translateZ(0);
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .channel-logo-img {
+      width: 42px;
+      height: 36px;
+      max-width: 42px;
+      max-height: 36px;
+      object-fit: contain;
+      display: block;
+      pointer-events: none;
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+    }
+
+    .channel-sub-badge {
+      position: absolute;
+      bottom: -4px;
+      right: -4px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.62rem;
+      font-weight: 800;
+      padding: 1px 4px;
+      border-radius: 4px;
+      color: #fff;
+      letter-spacing: 0.02em;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .channel-sub-badge.rds { background: #dc2626; }
+    .channel-sub-badge.tva { background: #2563eb; }
+    .channel-sub-badge.sportsnet { background: #0284c7; }
+    .channel-sub-badge.tsn { background: #b91c1c; }
+
+    .channel-cell-details {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .channel-cell-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: #fff;
+      white-space: normal;
+      word-break: break-word;
+      line-height: 1.22;
+    }
+
+    .channel-cell-cat {
+      font-size: 0.70rem;
+      color: var(--text-dim);
+      display: block;
+      white-space: normal;
+      line-height: 1.2;
+      margin-top: 2px;
+    }
+
+    .btn-watch-direct {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #ffffff;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+    }
+    .btn-watch-direct:hover {
+      background: linear-gradient(135deg, #f87171, #ef4444);
+      transform: scale(1.04);
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.55);
+    }
+
+    .epg-row[data-network="tva"] .btn-watch-direct {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+    }
+    .epg-row[data-network="tva"] .btn-watch-direct:hover {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.55);
+    }
+
+    .epg-row[data-network="sportsnet"] .btn-watch-direct {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.35);
+    }
+    .epg-row[data-network="sportsnet"] .btn-watch-direct:hover {
+      background: linear-gradient(135deg, #38bdf8, #0284c7);
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.55);
+    }
+
+    .shows-track {
+      display: flex;
+      position: relative;
+      align-items: center;
+      padding: 6px 0;
+    }
+
+    .show-block {
+      height: 76px;
+      margin-right: 4px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 7px 10px;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      overflow: visible;
+      flex-shrink: 0;
+      user-select: none;
+      position: relative;
+    }
+
+    .show-inner-sticky {
+      position: sticky;
+      left: 10px;
+      width: fit-content;
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      box-sizing: border-box;
+      pointer-events: none;
+    }
+
+    .show-block:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+    }
+
+    .show-block.is-live {
+      background: rgba(239, 68, 68, 0.15);
+      border-color: rgba(239, 68, 68, 0.45);
+      box-shadow: inset 0 0 14px rgba(239, 68, 68, 0.2);
+    }
+
+    .show-time {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .show-live-tag {
+      color: #ef4444;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.65rem;
+      letter-spacing: 0.04em;
+    }
+
+    .show-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.86rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .show-category {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ========================================================
+       PAGE 2 : VRAIS MATCHS DU JOUR (SCOREBOARD LIVE)
+       ======================================================== */
+    .events-page-view {
+      display: none;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .api-status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 10px 18px;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .sync-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sync-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .sync-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+    }
+
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 22px;
+    }
+
+    .match-card {
+      background: rgba(16, 22, 35, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 22px;
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .match-card:hover {
+      transform: translateY(-4px);
+      background: rgba(24, 34, 54, 0.95);
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+    }
+
+    .match-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .league-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .badge-mlb { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-nfl { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .badge-nhl { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge-f1  { background: rgba(234, 88, 12, 0.15); color: #fb923c; border: 1px solid rgba(234, 88, 12, 0.3); }
+    .badge-ufc { background: rgba(220, 38, 38, 0.2); color: #fca5a5; border: 1px solid rgba(220, 38, 38, 0.4); }
+    .badge-cfl { background: rgba(217, 119, 6, 0.15); color: #fbbf24; border: 1px solid rgba(217, 119, 6, 0.3); }
+    .badge-nba { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+
+    .match-status-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+    }
+
+    .match-status-tag.live {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.15);
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+    .match-status-tag.final {
+      color: #94a3b8;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+
+    .day-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .day-badge.today {
+      background: rgba(245, 158, 11, 0.18);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+    .day-badge.tomorrow {
+      background: rgba(148, 163, 184, 0.16);
+      color: #cbd5e1;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .header-refresh-btn {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.22), rgba(59, 130, 246, 0.12));
+      border: 1px solid rgba(59, 130, 246, 0.45);
+      color: #93c5fd;
+      padding: 7px 14px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.2s ease;
+    }
+    .header-refresh-btn:hover {
+      background: rgba(59, 130, 246, 0.35);
+      color: #ffffff;
+      border-color: rgba(96, 165, 250, 0.7);
+      transform: translateY(-1px);
+    }
+    .header-refresh-btn.spinning .refresh-icon {
+      animation: spinIcon 0.8s linear infinite;
+    }
+    @keyframes spinIcon {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .scoreboard {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 14px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      margin-bottom: 18px;
+    }
+
+    .team-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .team-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    .team-logo {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+      flex-shrink: 0;
+    }
+
+    .team-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .team-score {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #f1f5f9;
+      margin-left: 10px;
+    }
+
+    .match-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .match-footer.no-broadcast {
+      opacity: 0.85;
+    }
+
+    .broadcast-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+
+    .broadcast-badge.unavail {
+      color: #64748b;
+    }
+
+    .channel-pill-tag {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-size: 0.72rem;
+    }
+
+    .channel-pill-tag.unavail {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.08);
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .match-action-btn {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 9px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 3px 10px rgba(239, 68, 68, 0.35);
+      transition: all 0.2s;
+    }
+
+    .match-action-btn:hover {
+      background: linear-gradient(135deg, #f87171, #ef4444);
+      transform: scale(1.04);
+      box-shadow: 0 6px 16px rgba(239, 68, 68, 0.55);
+    }
+
+    .match-wait-pill {
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #fbbf24;
+      padding: 6px 12px;
+      border-radius: 9px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.02em;
+    }
+
+    .match-ended-pill {
+      background: rgba(148, 163, 184, 0.1);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      color: #94a3b8;
+      padding: 6px 12px;
+      border-radius: 9px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .match-na-pill {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      color: #64748b;
+      padding: 6px 12px;
+      border-radius: 9px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(4, 6, 12, 0.85);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+    }
+
+    .modal-box {
+      background: #0f1523;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      max-width: 540px;
+      width: 100%;
+      padding: 30px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+      position: relative;
+      animation: modalIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: none;
+      color: var(--text-muted);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.16);
+      color: #fff;
+    }
+
+    .modal-header-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .modal-logo-box {
+      width: 50px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-channel-tag {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .modal-time-tag {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .modal-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 14px;
+      line-height: 1.25;
+    }
+
+    .modal-desc {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      margin-bottom: 24px;
+    }
+
+    .modal-action-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: #fff;
+      text-decoration: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+      transition: all 0.2s;
+    }
+    .modal-action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(239, 68, 68, 0.6);
+    }
+
+    /* ========================================================
+       RESPONSIVE DESIGN (MacBook, tablettes et écrans compacts)
+       ======================================================== */
+    @media (max-width: 1440px) {
+      :root {
+        --channel-col-width: 310px;
+      }
+    }
+
+    @media (max-width: 1200px) {
+      :root {
+        --channel-col-width: 290px;
+        --slot-width-30min: 140px;
+      }
+      .channel-logo-wrapper {
+        width: 44px;
+        height: 38px;
+      }
+      .channel-logo-img {
+        max-width: 36px;
+        max-height: 30px;
+      }
+      .channel-cell-name {
+        font-size: 0.88rem;
+      }
+      .channel-cell-cat {
+        font-size: 0.68rem;
+      }
+      .btn-watch-direct {
+        padding: 5px 8px;
+        font-size: 0.72rem;
+      }
+    }
+
+    @media (max-width: 992px) {
+      :root {
+        --channel-col-width: 260px;
+        --slot-width-30min: 125px;
+      }
+      .app-container {
+        padding: 16px 12px;
+      }
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      .header-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .page-nav-tabs {
+        width: 100%;
+      }
+      .page-nav-btn {
+        flex: 1;
+        text-align: center;
+        padding: 10px 14px;
+        font-size: 0.88rem;
+      }
+      .events-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      :root {
+        --channel-col-width: 220px;
+        --slot-width-30min: 110px;
+      }
+      .channel-logo-wrapper {
+        width: 38px;
+        height: 34px;
+        padding: 2px;
+      }
+      .channel-logo-img {
+        max-width: 30px;
+        max-height: 26px;
+      }
+      .channel-cell-name {
+        font-size: 0.82rem;
+      }
+      .channel-cell-cat {
+        display: none;
+      }
+      .btn-watch-direct {
+        padding: 4px 6px;
+        font-size: 0.68rem;
+      }
+      .controls-top-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .events-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <div class="app-container">
+
+    <!-- Header -->
+    <header>
+      <div class="brand-group">
+        <div class="brand-icon">🏒</div>
+        <div class="brand-text">
+          <h1>Guide Sports Direct</h1>
+          <p><span class="live-dot"></span> Grille officielle (15 postes) & Vrais matchs en direct</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button class="header-refresh-btn" id="btn-header-refresh" onclick="forceRefreshAll()" title="Actualiser immédiatement le guide TV et les scores en direct">
+          <span class="refresh-icon">🔄</span>
+          <span id="btn-refresh-text">Actualiser tout</span>
+        </button>
+        <div class="time-badge">
+          <span>🕒 Heure :</span>
+          <span id="live-clock">--:--:--</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation principale -->
+    <div class="page-nav-tabs">
+      <button class="page-nav-btn active" id="tab-nav-guide" onclick="selectPageTab('guide')">
+        📺 Grille Horaire TV (15 Chaînes)
+      </button>
+      <button class="page-nav-btn" id="tab-nav-events" onclick="selectPageTab('events')">
+        🏆 Vrais Matchs en Direct & Aujourd'hui <span class="badge-count-pill" id="events-total-badge">Chargement...</span>
+      </button>
+    </div>
+
+    <!-- ========================================================
+         PAGE 1 : VUE GUIDE TV
+         ======================================================== -->
+    <div id="section-guide-tv">
+      <div class="controls-panel">
+        <div class="controls-top-row">
+          <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" class="search-input" placeholder="Rechercher (ex: Canadiens, LNH, JiC, Raptors, Le 5 à 7, Leafs)...">
+          </div>
+
+          <div class="time-jumpers">
+            <button class="time-jumper-btn now-btn" onclick="onClickNowButton()">🔴 Aller à maintenant</button>
+            <button class="time-jumper-btn" onclick="scrollTimelineToHour(12)">12h00 (Midi)</button>
+            <button class="time-jumper-btn" onclick="scrollTimelineToHour(16)">16h00</button>
+            <button class="time-jumper-btn" onclick="scrollTimelineToHour(19)">19h00 (Matchs)</button>
+            <button class="time-jumper-btn" onclick="scrollTimelineToHour(22)">22h00 (Soirée)</button>
+          </div>
+        </div>
+
+        <div class="category-pills">
+          <button class="pill active" data-filter="all">🌟 Tous les 15 postes</button>
+          <button class="pill" data-filter="qc">⚜️ Francophones (RDS & TVA)</button>
+          <button class="pill" data-filter="ca">🇨🇦 Anglophones (TSN & Sportsnet)</button>
+          <button class="pill" data-filter="rds">🔴 Réseau RDS</button>
+          <button class="pill" data-filter="tva">🔵 TVA Sports</button>
+          <button class="pill" data-filter="sportsnet">🟡 Sportsnet</button>
+          <button class="pill" data-filter="tsn">🟢 TSN</button>
+
+          <span class="channels-count" id="channels-count">15 chaînes affichées</span>
+        </div>
+      </div>
+
+      <div class="epg-grid-container" id="epg-grid-container">
+        <!-- Colonne fixe à gauche (Logos & Noms des postes STRICTEMENT FIXES) -->
+        <div class="epg-channels-column" id="epg-channels-column">
+          <div class="epg-channel-header-cell">Chaînes Sport</div>
+          <div class="epg-channels-list" id="epg-channels-list"></div>
+        </div>
+
+        <!-- Zone défilante horizontale (Règle horaire & Émissions) -->
+        <div class="grid-viewport-wrapper" id="grid-viewport">
+          <!-- Marqueur temporel global en direct qui traverse toute la hauteur du guide -->
+          <div class="current-time-marker" id="current-time-marker"></div>
+          <div class="epg-timeline-ruler" id="timeline-ruler"></div>
+          <div class="epg-shows-container" id="epg-shows-container"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================
+         PAGE 2 : VRAIS MATCHS DU JOUR EN DIRECT
+         ======================================================== -->
+    <div id="section-events" class="events-page-view">
+      
+      <!-- Barre d'état API live -->
+      <div class="api-status-bar">
+        <div class="sync-indicator">
+          <span class="live-dot"></span>
+          <span id="sync-text">Scores et matchs réels en direct (MLB, NFL, LNH, NBA, etc.)</span>
+        </div>
+        <button class="sync-btn" onclick="fetchLiveScoreboards()">
+          🔄 Actualiser les scores
+        </button>
+      </div>
+
+      <!-- Controls Panel Sports -->
+      <div class="controls-panel">
+        <div class="controls-top-row">
+          <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="events-search" class="search-input" placeholder="Rechercher une vraie équipe (ex: Blue Jays, Lions, Bills, Dodgers)...">
+          </div>
+
+          <div style="display: flex; gap: 8px;">
+            <button class="time-jumper-btn" onclick="filterByState('all')">Tous statuts</button>
+            <button class="time-jumper-btn now-btn" onclick="filterByState('live')">🔴 En direct</button>
+            <button class="time-jumper-btn" onclick="filterByState('pre')">⏱️ À venir</button>
+            <button class="time-jumper-btn" onclick="filterByState('post')">✅ Terminés</button>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase;">Période (2 Jours max) :</span>
+          <button class="pill active" data-day="all">📅 2 Jours (Tout)</button>
+          <button class="pill" data-day="today">☀️ Aujourd'hui</button>
+          <button class="pill" data-day="tomorrow">🌙 Demain</button>
+        </div>
+
+        <div class="category-pills">
+          <button class="pill active" data-sport="all">🌟 Tous les sports</button>
+          <button class="pill" data-sport="mlb">⚾ MLB (Baseball)</button>
+          <button class="pill" data-sport="nfl">🏈 NFL (Football)</button>
+          <button class="pill" data-sport="nhl">🏒 LNH (Hockey)</button>
+          <button class="pill" data-sport="cfl">🍁 CFL (Football)</button>
+          <button class="pill" data-sport="f1">🏎️ F1 (Course)</button>
+          <button class="pill" data-sport="ufc">🥊 UFC (Combat)</button>
+          <button class="pill" data-sport="nba">🏀 NBA</button>
+        </div>
+      </div>
+
+      <!-- Matchs Grid Container -->
+      <div class="events-grid" id="events-grid">
+        <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--text-dim);">
+          <p style="font-size: 1.3rem;">⏳ Chargement des vrais scores et matchs en direct...</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Modal Détails Émission -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      
+      <div class="modal-header-info">
+        <div class="modal-logo-box">
+          <img id="m-logo-img" src="" alt="" style="max-width:100%; max-height:100%; object-fit:contain;">
+        </div>
+        <div>
+          <div class="modal-channel-tag" id="m-channel-tag">RDS</div>
+          <div class="modal-time-tag" id="m-time-tag">19:00 - 22:00</div>
+        </div>
+      </div>
+
+      <h2 class="modal-title" id="m-title">LNH en direct : Canadiens de Montréal vs Sénateurs</h2>
+      <p class="modal-desc" id="m-desc">Description de l'émission...</p>
+
+      <a href="#" target="_blank" rel="noopener noreferrer" class="modal-action-btn" id="m-watch-btn">
+        <span>▶ Regarder sur <span id="m-channel-name-btn">RDS</span></span>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Désactiver la restauration automatique de défilement de Chrome pour garantir le calage immédiat à maintenant
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+
+    const START_HOUR = 6;
+    const END_HOUR = 30;
+    const PIXELS_PER_MINUTE = 5;
+
+    // Logos SVG officiels locaux (affichage instantané et garanti)
+    const LOGO_RDS = "/logos/rds.svg";
+    const LOGO_TVA = "/logos/tva.svg";
+    const LOGO_SN  = "/logos/sportsnet.svg";
+    const LOGO_TSN = "/logos/tsn.svg";
+
+    // Les 15 chaînes avec tes liens personnalisés configurés
+    const SPORTS_CHANNELS = [
+      {
+        id: "rds",
+        name: "RDS",
+        network: "rds",
+        region: "qc",
+        sublabel: "Réseau des Sports",
+        logoImg: LOGO_RDS,
+        subBadge: null,
+        directUrl: "https://dlive.sx/watch.php?id=839",
+        schedule: [
+          { start: "06:00", end: "06:30", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "06:30", end: "07:00", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "07:00", end: "07:30", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "07:30", end: "08:00", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "08:00", end: "08:30", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "08:30", end: "09:00", title: "Accès golf", desc: "Les plus beaux parcours de golf du Québec.", cat: "Sports, Golf" },
+          { start: "09:00", end: "09:30", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "09:30", end: "12:00", title: "Hockey balle", desc: "Du 21 au 23 août 2026, le Centre Pierre-Charbonneau sera le théâtre d'un affrontement attendu alors que le Camping Île-Marie de Sherbrooke et les Hawks de Mirabel se disputent les grands honneurs de la Finale LNHB 2026.", cat: "Sports, Hockey" },
+          { start: "12:00", end: "13:00", title: "On jase", desc: "On jase de la nouvelle édition du Canadien.", cat: "Sports, Talk Show" },
+          { start: "13:00", end: "13:30", title: "Le sport en toute liberté", desc: "Un regard sur le monde des performances extrêmes : saut extrême, snowboard et plus.", cat: "Sports, Extreme" },
+          { start: "13:30", end: "13:45", title: "Blitz: avant-match NFL", desc: "Tout ce qu'il faut savoir sur les matchs.", cat: "Sports, Football" },
+          { start: "13:45", end: "17:00", title: "Football NFL", desc: "New Highmark Stadium", cat: "Sports, Football" },
+          { start: "17:00", end: "19:00", title: "Le 5 à 7", desc: "Frédéric Plante et Yanick Bouchard donnent vie à cette version magazine de Sports 30.", cat: "Sports, Talk Show" },
+          { start: "19:00", end: "19:30", title: "L'avant-match des Alouettes", desc: "Analyse d'avant-match des Alouettes.", cat: "Sports, Football" },
+          { start: "19:30", end: "22:30", title: "Football LCF", desc: "En provenance du stade Hamilton à Hamilton, en Ontario.", cat: "Sports, Football" },
+          { start: "22:30", end: "23:00", title: "L'antichambre", desc: "On propose des débats sur les sujets les plus chauds de l'actualité sportive.", cat: "Sports, Talk Show" },
+          { start: "23:00", end: "23:30", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "23:30", end: "00:00", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "00:00", end: "01:00", title: "Alouettes express", desc: "Le plus récent match des Alouettes de Montréal, en 30 minutes.", cat: "Sports, Football" },
+          { start: "01:00", end: "02:00", title: "Hard Knocks: le camp d'entrainement des Seahawks de Seattle", desc: "Un accès exclusif aux coulisses du camp d'entraînement des Seahawks de Seattle, champions en titre du Super Bowl.", cat: "Sports, Documentary" },
+          { start: "02:00", end: "02:30", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "02:30", end: "03:00", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "03:00", end: "03:30", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "03:30", end: "04:00", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "04:00", end: "04:30", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "04:30", end: "05:00", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "05:00", end: "05:30", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "05:30", end: "06:00", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" }
+        ]
+      },
+      {
+        id: "rds2",
+        name: "RDS 2",
+        network: "rds",
+        region: "qc",
+        sublabel: "Sports Alternatifs & Événements",
+        logoImg: LOGO_RDS,
+        subBadge: "2",
+        directUrl: "https://dlive.sx/watch.php?id=840",
+        schedule: [
+          { start: "05:00", end: "07:00", title: "Le 5 à 7", desc: "Frédéric Plante et Yanick Bouchard donnent vie à cette version magazine de Sports 30.", cat: "Sports, Talk Show" },
+          { start: "07:00", end: "07:30", title: "L'antichambre", desc: "On propose des débats sur les sujets les plus chauds de l'actualité sportive.", cat: "Sports, Talk Show" },
+          { start: "07:30", end: "09:30", title: "Le 5 à 7", desc: "Frédéric Plante et Yanick Bouchard donnent vie à cette version magazine de Sports 30.", cat: "Sports, Talk Show" },
+          { start: "09:30", end: "10:00", title: "L'antichambre", desc: "On propose des débats sur les sujets les plus chauds de l'actualité sportive.", cat: "Sports, Talk Show" },
+          { start: "10:00", end: "10:30", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "10:30", end: "12:30", title: "Le 5 à 7", desc: "Frédéric Plante et Yanick Bouchard donnent vie à cette version magazine de Sports 30.", cat: "Sports, Talk Show" },
+          { start: "12:30", end: "13:00", title: "L'antichambre", desc: "On propose des débats sur les sujets les plus chauds de l'actualité sportive.", cat: "Sports, Talk Show" },
+          { start: "13:00", end: "14:00", title: "On jase", desc: "On jase de la nouvelle édition du Canadien.", cat: "Sports, Talk Show" },
+          { start: "14:00", end: "14:30", title: "Passion autos", desc: "Émission sur l'actualité automobile qui a pour but d'informer et divertir les amateurs d'automobiles et partager les connaissances sur la mécanique générale.", cat: "Automotive" },
+          { start: "14:30", end: "15:00", title: "Coupe Radical Canada 2026", desc: "La Radical Cup Canada se prépare à un moment historique en 2026 avec son retour à l'Ontario Honda Dealers Indy, et plus précisément sur le tout nouveau circuit de l'Ontario Honda Dealers Indy à Markham, en Ontario.", cat: "Sports, Auto Racing" },
+          { start: "15:00", end: "15:30", title: "Challenge Canada 2026", desc: "Chaque voiture du Challenge Canada est monotype, offrant des courses où le talent des pilotes prime. Les véhicules sont préparés pour maximiser performance et sécurité tout en conservant l'égalité mécanique entre tous les compétiteurs.", cat: "Sports, Auto Racing" },
+          { start: "15:30", end: "16:00", title: "3-2-1 régates", desc: "", cat: "Sports, Talk Show" },
+          { start: "16:00", end: "16:30", title: "Série mondiale Golden Trail", desc: "", cat: "Sports, Miscellaneous" },
+          { start: "16:30", end: "17:00", title: "Accès golf", desc: "Les plus beaux parcours de golf du Québec.", cat: "Sports, Golf" },
+          { start: "17:00", end: "18:00", title: "SailGP", desc: "", cat: "Sports" },
+          { start: "18:00", end: "18:30", title: "On jase", desc: "On jase de la nouvelle édition du Canadien.", cat: "Sports, Talk Show" },
+          { start: "18:30", end: "18:45", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "18:45", end: "19:00", title: "Sports 30", desc: "Les plus récents dénouements dans le monde du sport. On analyse en profondeur les résultats des dernières 24 heures dans toutes les disciplines. Hockey, football, baseball, Formule 1, rien n'échappe à nos animateurs.", cat: "Sports, Miscellaneous" },
+          { start: "19:00", end: "21:30", title: "Crankworx World Tour", desc: "Slopestyle finale élite hommes et femmes.", cat: "Sports, Cycling" },
+          { start: "21:30", end: "22:00", title: "30 images/seconde", desc: "Des palmarès percutants réunissant les moments forts du monde du sport.", cat: "Sports, News" },
+          { start: "22:00", end: "22:30", title: "Horizon performance", desc: "Un rendez-vous pour les amateurs de navigation de plaisance, moto, trois-roues, quatre-roues et de motoneige.", cat: "Automotive, Documentary" },
+          { start: "22:30", end: "23:00", title: "Le meilleur des deux mondes", desc: "À Pemberton, Kassandra et Luc découvrent le kayak de rivière, un sport nautique reconnu pour ses risques où la moindre erreur peut coûter cher.", cat: "Sports, Miscellaneous" },
+          { start: "23:00", end: "23:30", title: "Le sport en toute liberté", desc: "Un regard sur le monde des performances extrêmes : saut extrême, snowboard et plus.", cat: "Sports, Extreme" },
+          { start: "23:30", end: "00:00", title: "L'antichambre", desc: "On propose des débats sur les sujets les plus chauds de l'actualité sportive.", cat: "Sports, Talk Show" },
+          { start: "00:00", end: "02:00", title: "Le 5 à 7", desc: "Frédéric Plante et Yanick Bouchard donnent vie à cette version magazine de Sports 30.", cat: "Sports, Talk Show" },
+          { start: "02:00", end: "02:30", title: "L'antichambre", desc: "On propose des débats sur les sujets les plus chauds de l'actualité sportive.", cat: "Sports, Talk Show" },
+          { start: "02:30", end: "04:30", title: "Le 5 à 7", desc: "Frédéric Plante et Yanick Bouchard donnent vie à cette version magazine de Sports 30.", cat: "Sports, Talk Show" },
+          { start: "04:30", end: "05:00", title: "L'antichambre", desc: "On propose des débats sur les sujets les plus chauds de l'actualité sportive.", cat: "Sports, Talk Show" },
+          { start: "05:00", end: "07:00", title: "Le 5 à 7", desc: "Frédéric Plante et Yanick Bouchard donnent vie à cette version magazine de Sports 30.", cat: "Sports, Talk Show" }
+        ]
+      },
+      {
+        id: "rds-info",
+        name: "RDS Info",
+        network: "rds",
+        region: "qc",
+        sublabel: "Nouvelles sportives 24/7",
+        logoImg: LOGO_RDS,
+        subBadge: "INFO",
+        directUrl: "https://dlive.sx/watch.php?id=840",
+        schedule: [
+          { start: "06:00", end: "07:00", title: "Sports 30 Matin", desc: "Faits saillants et actualités sportives en continu.", cat: "Nouvelles" },
+          { start: "07:00", end: "08:00", title: "Sports 30", desc: "Tour d'horizon de l'actualité du sport québécois.", cat: "Nouvelles" },
+          { start: "08:00", end: "09:00", title: "Sports 30 Express", desc: "Mises à jour rapides et faits saillants de la veille.", cat: "Nouvelles" },
+          { start: "09:00", end: "11:30", title: "Tribune Info & Conférences LNH", desc: "Points de presse et entrevues des joueurs.", cat: "Conférence" },
+          { start: "11:30", end: "13:30", title: "Le Midi Sportif Info", desc: "Analyse en direct des dossiers chauds du sport.", cat: "Analyse" },
+          { start: "13:30", end: "15:00", title: "Sports 30 en boucle", desc: "Actualité en continu pour ne rien manquer.", cat: "Info continue" },
+          { start: "15:00", end: "17:00", title: "Hockey 360 Info", desc: "Préparation des alignements et analyse des trios.", cat: "Hockey LNH" },
+          { start: "17:00", end: "19:00", title: "Le 5 à 7 (Simultané)", desc: "Yanick Bouchard et Frédéric Plante animent le talk-show sportif québécois.", cat: "Magazine Talk-Show" },
+          { start: "19:00", end: "22:00", title: "Passerelle Info & Scores en direct", desc: "Statistiques en temps réel et scores de tous les matchs nord-américains.", cat: "Scores en direct" },
+          { start: "22:00", end: "23:30", title: "L'Antichambre (Simultané)", desc: "Le panel d'experts analyse la soirée sportive.", cat: "Analyse" },
+          { start: "23:30", end: "01:00", title: "Sports 30 Nuit", desc: "Bilan complet de la soirée sportive en Amérique du Nord.", cat: "Faits saillants" },
+          { start: "01:00", end: "06:00", title: "Sports 30 en continu", desc: "Rediffusion continue des manchettes de la nuit.", cat: "Info continue" }
+        ]
+      },
+      {
+        id: "tva-sports",
+        name: "TVA Sports",
+        network: "tva",
+        region: "qc",
+        sublabel: "Diffuseur officiel de la LNH",
+        logoImg: LOGO_TVA,
+        subBadge: null,
+        directUrl: "https://dlive.sx/watch.php?id=833",
+        schedule: [
+          { start: "06:00", end: "09:00", title: "Baseball MLB", desc: "En provenance du Citi Field à Flushing, dans l'État de New York.", cat: "Sports, Baseball" },
+          { start: "09:00", end: "09:30", title: "Long Range Hunter", desc: "Yannick et ses amis participent à une chasse à l'ours noir au Club Gatineau.", cat: "Sports, Hunting" },
+          { start: "09:30", end: "10:00", title: "Motosports.tv", desc: "Des émissions de motos et motoneiges destinées aux vrais mordus de sport motorisé.", cat: "Automotive" },
+          { start: "10:00", end: "10:30", title: "Canada in the Rough", desc: "Paul Beasley part à la chasse au tétras en Ontario avec des chiens.", cat: "Sports, Outdoors" },
+          { start: "10:30", end: "11:00", title: "Le guide de l'auto", desc: "L'équipe met à l'essai le GMC Terrain Denali; positionné comme produit d'entrée de gamme chez GMC, peut-il réellement se démarquer dans un segment hautement compétitif ? On analyse le véhicule en profondeur et on le compare à ses principaux rivaux.", cat: "Automotive" },
+          { start: "11:00", end: "11:30", title: "L'académie du guide de l'auto: formule Grand Prix", desc: "Le rire est au rendez-vous avec l'animateur Sébastien Diaz et le musicien Jean-François Breau, qui s'affrontent en piste à bord du Cybertruck de Location Paramount. Présenté par notre chroniqueur automobile vedette Antoine Joubert.", cat: "Automotive, Reality TV" },
+          { start: "11:30", end: "13:00", title: "L'histoire de Leon Glatzer", desc: "L'océan est tout pour le surfeur professionnel Léon Glatzer. Découvrez son récit émouvant.", cat: "Sports, Watersports" },
+          { start: "13:00", end: "13:30", title: "La vérité sur...", desc: "Série qui aborde avec humour différents aspects du sport afin de départager le vrai du faux !", cat: "Regular" },
+          { start: "13:30", end: "16:00", title: "Baseball MLB", desc: "En provenance du Citi Field à Flushing, dans l'État de New York.", cat: "Sports, Baseball" },
+          { start: "16:00", end: "17:00", title: "Cinéma", desc: "Ce voyage cinématographique retrace les hauts, les bas et tout ce qui se trouve entre les deux dans le parcours de Mathilde Gremaud, championne du monde de freeski.", cat: "Movies, Documentary" },
+          { start: "17:00", end: "18:00", title: "Mythique Mont-Royal: le circuit des légendes", desc: "", cat: "Sports, Documentary" },
+          { start: "18:00", end: "18:30", title: "Le Podcast des Blue Jays", desc: "On traite de l'actualité sportive de l'équipe des Blue Jays de Toronto en français.", cat: "Sports, Miscellaneous" },
+          { start: "18:30", end: "19:00", title: "JiC Édition football", desc: "L'actualité du football vue autrement, avec des collaborateurs impressionnants.", cat: "Sports, Talk Show" },
+          { start: "19:00", end: "22:00", title: "Baseball MLB", desc: "En provenance du Tropicana Field, à St. Petersburg, en Floride.", cat: "Sports, Baseball" },
+          { start: "22:00", end: "00:30", title: "Baseball MLB", desc: "Les Yankees de New York affrontent les Diamondbacks de l'Arizona lors du premier match d'une série de trois rencontres au Chase Field.", cat: "Sports, Baseball" },
+          { start: "00:30", end: "03:30", title: "Baseball MLB", desc: "En provenance du Tropicana Field, à St. Petersburg, en Floride.", cat: "Sports, Baseball" },
+          { start: "03:30", end: "06:00", title: "Baseball MLB", desc: "Les Yankees de New York affrontent les Diamondbacks de l'Arizona lors du premier match d'une série de trois rencontres au Chase Field.", cat: "Sports, Baseball" }
+        ]
+      },
+      {
+        id: "tva-sports-2",
+        name: "TVA Sports 2",
+        network: "tva",
+        region: "qc",
+        sublabel: "Matchs additionnels & Galas",
+        logoImg: LOGO_TVA,
+        subBadge: "2",
+        directUrl: "https://dlive.sx/watch.php?id=834",
+        schedule: [
+          { start: "06:00", end: "06:30", title: "Infopublicité", desc: "Ceci est une émission publicitaire payée.", cat: "Paid Program, Shopping" },
+          { start: "06:30", end: "07:30", title: "Cinéma", desc: "", cat: "Movies, Documentary" },
+          { start: "07:30", end: "08:30", title: "Cinéma", desc: "Ce voyage cinématographique retrace les hauts, les bas et tout ce qui se trouve entre les deux dans le parcours de Mathilde Gremaud, championne du monde de freeski.", cat: "Movies, Documentary" },
+          { start: "08:30", end: "10:00", title: "L'histoire de Leon Glatzer", desc: "L'océan est tout pour le surfeur professionnel Léon Glatzer. Découvrez son récit émouvant.", cat: "Sports, Watersports" },
+          { start: "10:00", end: "10:30", title: "Infopublicité", desc: "Ceci est une émission publicitaire payée.", cat: "Paid Program, Shopping" },
+          { start: "10:30", end: "13:30", title: "Baseball MLB", desc: "En provenance du Citi Field à Flushing, dans l'État de New York.", cat: "Sports, Baseball" },
+          { start: "13:30", end: "14:00", title: "Motosports.tv", desc: "Des émissions de motos et motoneiges destinées aux vrais mordus de sport motorisé.", cat: "Automotive" },
+          { start: "14:00", end: "14:30", title: "Golf mag", desc: "Magazine sur le golf.", cat: "Sports, Golf" },
+          { start: "14:30", end: "15:00", title: "Québec à vol d'oiseau", desc: "Les plus belles aventures de chasse et de pêche.", cat: "Sports, Hunting" },
+          { start: "15:00", end: "15:30", title: "Long Range Hunter", desc: "Une chasse unique dans le froid extrême en Saskatchewan chez WTO.", cat: "Sports, Hunting" },
+          { start: "15:30", end: "16:00", title: "Ski nautique", desc: "", cat: "Sports, Watersports" },
+          { start: "16:00", end: "16:30", title: "L'académie du guide de l'auto: formule Grand Prix", desc: "Le rire est au rendez-vous avec l'animateur Sébastien Diaz et le musicien Jean-François Breau, qui s'affrontent en piste à bord du Cybertruck de Location Paramount. Présenté par notre chroniqueur automobile vedette Antoine Joubert.", cat: "Automotive, Reality TV" },
+          { start: "16:30", end: "17:00", title: "Le guide de l'auto", desc: "L'équipe met à l'essai le GMC Terrain Denali; positionné comme produit d'entrée de gamme chez GMC, peut-il réellement se démarquer dans un segment hautement compétitif ? On analyse le véhicule en profondeur et on le compare à ses principaux rivaux.", cat: "Automotive" },
+          { start: "17:00", end: "21:00", title: "Tennis: Coupe Davis 2026", desc: "En provenance du Centre Vidéotron, à la ville de Québec, au Québec.", cat: "Sports, Tennis" },
+          { start: "21:00", end: "23:00", title: "Tennis: Tournoi de Guadalajara 2026", desc: "En provenance du Pan American Tennis Center, à Guadalajara au Mexique.", cat: "Sports, Tennis" },
+          { start: "23:00", end: "01:00", title: "Tennis: Tournoi de Guadalajara 2026", desc: "En provenance du Pan American Tennis Center, à Guadalajara au Mexique.", cat: "Sports, Tennis" },
+          { start: "01:00", end: "05:00", title: "Tennis: Coupe Davis 2026", desc: "En provenance du Centre Vidéotron, à la ville de Québec, au Québec.", cat: "Sports, Tennis" },
+          { start: "05:00", end: "05:30", title: "La vérité sur...", desc: "Série qui aborde avec humour différents aspects du sport afin de départager le vrai du faux !", cat: "Regular" },
+          { start: "05:30", end: "06:00", title: "Le Podcast des Blue Jays", desc: "On traite de l'actualité sportive de l'équipe des Blue Jays de Toronto en français.", cat: "Sports, Miscellaneous" }
+        ]
+      },
+      {
+        id: "tsn1",
+        name: "TSN 1",
+        network: "tsn",
+        region: "ca",
+        sublabel: "Pacific & National Sports",
+        logoImg: LOGO_TSN,
+        subBadge: "1",
+        directUrl: "https://dlive.sx/watch.php?id=111",
+        schedule: [
+          { start: "05:30", end: "06:30", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "06:30", end: "07:30", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "07:30", end: "08:30", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "08:30", end: "09:30", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "09:30", end: "10:30", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "10:30", end: "11:30", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "11:30", end: "12:30", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "12:30", end: "13:30", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "13:30", end: "14:00", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "14:00", end: "14:30", title: "Canadian Superbike Championship", desc: "From Grand Bend Motorplex in Grand Bend, Ontario.", cat: "Sports, Motorcycle Racing" },
+          { start: "14:30", end: "15:00", title: "Motorcycle Experience", desc: "Dave Hatch and Emily Roberts share their passion for the sport as they interview motorcycle enthusiasts, share hard won tips and tricks, review the latest bikes, and travel to some of the best riding locations across North America.", cat: "Sports, Motorcycle Racing" },
+          { start: "15:00", end: "16:00", title: "NBA Today", desc: "In-depth, comprehensive daily coverage of all aspects of the NBA from expert analysts.", cat: "Sports, Basketball" },
+          { start: "16:00", end: "17:00", title: "NFL Live", desc: "Host Laura Rutledge takes the helm of this weekday show featuring the likes of Marcus Spears, Dan Orlovsky, Mina Kimes, and Adam Schefter, who offer the latest news and analysis from across the NFL.", cat: "Sports, Football" },
+          { start: "17:00", end: "17:30", title: "College Football Live", desc: "ESPN's daily college football show sharing reactions to the day's biggest stories and previews of each week's most important matchups. Kelsey Riggs and Jen Lada host alongside contributors Desmond Howard, Sam Acho, Greg McElroy and Pete Thamel.", cat: "Sports, Football" },
+          { start: "17:30", end: "18:00", title: "Pardon the Interruption", desc: "Opinions regarding the day's top sports stories.", cat: "Sports, Talk Show" },
+          { start: "18:00", end: "19:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "19:00", end: "19:30", title: "CFL on TSN Pregame", desc: "The CFL on TSN panel sets up the game ahead.", cat: "Sports, Football" },
+          { start: "19:30", end: "22:30", title: "CFL Football", desc: "The Hamilton Tiger-Cats host the Montreal Alouettes in CFL Week 16. Montreal leads the East Division and arrives having beaten Hamilton, 31-18, in July. The Tiger-Cats have dropped three straight and sit third in the Eastern Conference.", cat: "Sports, Football" },
+          { start: "22:30", end: "00:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "00:00", end: "00:30", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "00:30", end: "01:00", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "01:00", end: "02:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "02:00", end: "03:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "03:00", end: "04:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "04:00", end: "05:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "05:00", end: "06:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" }
+        ]
+      },
+      {
+        id: "tsn2",
+        name: "TSN 2",
+        network: "tsn",
+        region: "ca",
+        sublabel: "Tennis Masters & Racing",
+        logoImg: LOGO_TSN,
+        subBadge: "2",
+        directUrl: "https://dlive.sx/watch.php?id=112",
+        schedule: [
+          { start: "05:21", end: "08:30", title: "AFL Premiership Football", desc: "Preliminary Final.", cat: "Sports, Australian Rules Football" },
+          { start: "08:30", end: "09:00", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "09:00", end: "09:30", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "09:30", end: "10:00", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "10:00", end: "10:30", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "10:30", end: "11:00", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "11:00", end: "11:30", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "11:30", end: "12:00", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "12:00", end: "13:00", title: "SC", desc: "Features the top 100 catches of all-time.", cat: "Sports, Anthology" },
+          { start: "13:00", end: "13:30", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "13:30", end: "14:00", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "14:00", end: "15:00", title: "PBR Tour Canada", desc: "", cat: "Sports, Rodeo" },
+          { start: "15:00", end: "15:30", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "15:30", end: "16:00", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "16:00", end: "18:00", title: "AFL Women's Premiership Football", desc: "From Cazalys Stadium in Cairns, Queensland, Australia.", cat: "Sports, Australian Rules Football" },
+          { start: "18:00", end: "18:30", title: "SC", desc: "2025 SC Top 10-SC: Top 10 Women's World Hockey Championship Games.", cat: "Sports, Anthology" },
+          { start: "18:30", end: "19:00", title: "SC", desc: "2026 SC Top 10-SC: Top World Junior Moments.", cat: "Sports, Anthology" },
+          { start: "19:00", end: "19:30", title: "College Football Countdown", desc: "A look at the day's college football action, featuring news, highlights and game previews.", cat: "Sports, Football" },
+          { start: "19:30", end: "23:00", title: "College Football", desc: "The Wake Forest Demon Deacons host the No. 5 Miami Hurricanes at Allegacy Federal Credit Union Stadium. Miami comes off a dominant 77-7 win over Florida A&amp;M, while Wake Forest and coach Jake Dickert beat Purdue, 38-36, in double overtime in Week 2.", cat: "Sports, Football" },
+          { start: "23:00", end: "23:30", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "23:30", end: "00:00", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "00:00", end: "00:30", title: "TSN Hockey Top 50 Players Special", desc: "TSN breaks down the top 50 players in the NHL.", cat: "Sports, Hockey" },
+          { start: "00:30", end: "01:00", title: "SC", desc: "2024 SC Top 10-SC: Coaches Gone Wild.", cat: "Sports, Anthology" },
+          { start: "01:00", end: "03:00", title: "AFL Women's Premiership Football", desc: "Coverage of women's Australian rules football.", cat: "Sports, Australian Rules Football" },
+          { start: "03:00", end: "06:00", title: "AFL Premiership Football", desc: "Preliminary Final.", cat: "Sports, Australian Rules Football" }
+        ]
+      },
+      {
+        id: "tsn3",
+        name: "TSN 3",
+        network: "tsn",
+        region: "ca",
+        sublabel: "Winnipeg Jets & Western Canada",
+        logoImg: LOGO_TSN,
+        subBadge: "3",
+        directUrl: "https://dlive.sx/watch.php?id=113",
+        schedule: [
+          { start: "05:30", end: "06:30", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "06:30", end: "07:30", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "07:30", end: "08:30", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "08:30", end: "09:30", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "09:30", end: "10:30", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "10:30", end: "11:30", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "11:30", end: "12:30", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "12:30", end: "13:30", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "13:30", end: "14:00", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "14:00", end: "14:30", title: "Canadian Superbike Championship", desc: "From Grand Bend Motorplex in Grand Bend, Ontario.", cat: "Sports, Motorcycle Racing" },
+          { start: "14:30", end: "15:00", title: "Motorcycle Experience", desc: "Dave Hatch and Emily Roberts share their passion for the sport as they interview motorcycle enthusiasts, share hard won tips and tricks, review the latest bikes, and travel to some of the best riding locations across North America.", cat: "Sports, Motorcycle Racing" },
+          { start: "15:00", end: "16:00", title: "NBA Today", desc: "In-depth, comprehensive daily coverage of all aspects of the NBA from expert analysts.", cat: "Sports, Basketball" },
+          { start: "16:00", end: "17:00", title: "NFL Live", desc: "Host Laura Rutledge takes the helm of this weekday show featuring the likes of Marcus Spears, Dan Orlovsky, Mina Kimes, and Adam Schefter, who offer the latest news and analysis from across the NFL.", cat: "Sports, Football" },
+          { start: "17:00", end: "17:30", title: "College Football Live", desc: "ESPN's daily college football show sharing reactions to the day's biggest stories and previews of each week's most important matchups. Kelsey Riggs and Jen Lada host alongside contributors Desmond Howard, Sam Acho, Greg McElroy and Pete Thamel.", cat: "Sports, Football" },
+          { start: "17:30", end: "18:00", title: "Pardon the Interruption", desc: "Opinions regarding the day's top sports stories.", cat: "Sports, Talk Show" },
+          { start: "18:00", end: "19:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "19:00", end: "19:30", title: "CFL on TSN Pregame", desc: "The CFL on TSN panel sets up the game ahead.", cat: "Sports, Football" },
+          { start: "19:30", end: "22:30", title: "CFL Football", desc: "The Hamilton Tiger-Cats host the Montreal Alouettes in CFL Week 16. Montreal leads the East Division and arrives having beaten Hamilton, 31-18, in July. The Tiger-Cats have dropped three straight and sit third in the Eastern Conference.", cat: "Sports, Football" },
+          { start: "22:30", end: "00:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "00:00", end: "00:30", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "00:30", end: "01:00", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "01:00", end: "02:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "02:00", end: "03:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "03:00", end: "04:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "04:00", end: "05:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "05:00", end: "06:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" }
+        ]
+      },
+      {
+        id: "tsn4",
+        name: "TSN 4",
+        network: "tsn",
+        region: "ca",
+        sublabel: "Toronto Maple Leafs Regional",
+        logoImg: LOGO_TSN,
+        subBadge: "4",
+        directUrl: "https://dlive.sx/watch.php?id=114",
+        schedule: [
+          { start: "06:00", end: "07:00", title: "SC With Jay Onrait", desc: "The latest scores and highlights, with host Jay Onrait.", cat: "Sports, Talk Show" },
+          { start: "07:00", end: "08:00", title: "SC With Jay Onrait", desc: "The latest scores and highlights, with host Jay Onrait.", cat: "Sports, Talk Show" },
+          { start: "08:00", end: "09:00", title: "SC With Jay Onrait", desc: "The latest scores and highlights, with host Jay Onrait.", cat: "Sports, Talk Show" },
+          { start: "09:00", end: "10:00", title: "SC With Jay Onrait", desc: "The latest scores and highlights, with host Jay Onrait.", cat: "Sports, Talk Show" },
+          { start: "10:00", end: "11:00", title: "SC With Jay Onrait", desc: "The latest scores and highlights, with host Jay Onrait.", cat: "Sports, Talk Show" },
+          { start: "11:00", end: "11:30", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "11:30", end: "12:00", title: "TSN Hockey Top 50 Players Special", desc: "TSN breaks down the top 50 players in the NHL.", cat: "Sports, Hockey" },
+          { start: "12:00", end: "14:00", title: "First Take", desc: "Stephen A. Smith debates the hottest topics in sports.", cat: "Sports, News" },
+          { start: "14:00", end: "14:30", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "14:30", end: "15:30", title: "The Amazing Race Canada", desc: "On the high-stakes season finale, the top three teams race to Calgary, Alberta for an action-packed showdown as they battle for the title of champions.", cat: "Travel, Game Shows" },
+          { start: "15:30", end: "16:00", title: "TSN Hockey Top 50 Players Special", desc: "TSN breaks down the top 50 players in the NHL.", cat: "Sports, Hockey" },
+          { start: "16:00", end: "18:00", title: "Overdrive", desc: "Expert analysis on the day's biggest sports stories.", cat: "Sports, Talk Show" },
+          { start: "18:00", end: "19:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "19:00", end: "19:30", title: "Toronto Tempo Basketball Pregame", desc: "Pregame coverage for the Toronto Tempo women's basketball team.", cat: "Sports, Basketball" },
+          { start: "19:30", end: "21:30", title: "WNBA Basketball", desc: "The Toronto Tempo host the Indiana Fever at Coca-Cola Coliseum in a WNBA regular-season game. Indiana leads the season 2-0 against Toronto. Kelsey Mitchell leads the Fever in points, while Isabelle Harrison leads the Tempo in rebounds.", cat: "Sports, Basketball" },
+          { start: "21:30", end: "22:30", title: "CFL Football", desc: "The Hamilton Tiger-Cats host the Montreal Alouettes in CFL Week 16. Montreal leads the East Division and arrives having beaten Hamilton, 31-18, in July. The Tiger-Cats have dropped three straight and sit third in the Eastern Conference.", cat: "Sports, Football" },
+          { start: "22:30", end: "00:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "00:00", end: "00:30", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "00:30", end: "01:00", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "01:00", end: "02:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "02:00", end: "02:30", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "02:30", end: "02:50", title: "SC", desc: "2026 SC Top 10-SC: Top World Junior Moments.", cat: "Sports, Anthology" },
+          { start: "02:50", end: "05:00", title: "2026 World Rugby Pacific Nations Cup", desc: "From Chichibunomiya Stadium in Tokyo, Japan.", cat: "Sports, Rugby" },
+          { start: "05:00", end: "05:55", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "05:55", end: "08:00", title: "2026 World Rugby Pacific Nations Cup", desc: "From Chichibunomiya Stadium in Tokyo, Japan.", cat: "Sports, Rugby" }
+        ]
+      },
+      {
+        id: "tsn5",
+        name: "TSN 5",
+        network: "tsn",
+        region: "ca",
+        sublabel: "Ottawa Senators & Canadiens",
+        logoImg: LOGO_TSN,
+        subBadge: "5",
+        directUrl: "https://dlive.sx/watch.php?id=115",
+        schedule: [
+          { start: "06:00", end: "07:00", title: "SC With Jay Onrait", desc: "The latest scores and highlights, with host Jay Onrait.", cat: "Sports, Talk Show" },
+          { start: "07:00", end: "08:00", title: "SC With Jay Onrait", desc: "The latest scores and highlights, with host Jay Onrait.", cat: "Sports, Talk Show" },
+          { start: "08:00", end: "09:00", title: "SC With Jay Onrait", desc: "The latest scores and highlights, with host Jay Onrait.", cat: "Sports, Talk Show" },
+          { start: "09:00", end: "10:00", title: "SC With Jay Onrait", desc: "The latest scores and highlights, with host Jay Onrait.", cat: "Sports, Talk Show" },
+          { start: "10:00", end: "11:00", title: "SC With Jay Onrait", desc: "The latest scores and highlights, with host Jay Onrait.", cat: "Sports, Talk Show" },
+          { start: "11:00", end: "12:00", title: "SC With Jay Onrait", desc: "The latest scores and highlights, with host Jay Onrait.", cat: "Sports, Talk Show" },
+          { start: "12:00", end: "12:30", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "12:30", end: "13:00", title: "NFL GameDay", desc: "In-progress up-to-the-minute highlights; top moments from all the day's action; interviews and analysis.", cat: "Sports, Talk Show" },
+          { start: "13:00", end: "13:30", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "13:30", end: "14:00", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "14:00", end: "14:30", title: "SC", desc: "The best and worst from the world of sports.", cat: "Sports, Anthology" },
+          { start: "14:30", end: "15:30", title: "The Amazing Race Canada", desc: "On the high-stakes season finale, the top three teams race to Calgary, Alberta for an action-packed showdown as they battle for the title of champions.", cat: "Travel, Game Shows" },
+          { start: "15:30", end: "16:00", title: "TSN Hockey Top 50 Players Special", desc: "TSN breaks down the top 50 players in the NHL.", cat: "Sports, Hockey" },
+          { start: "16:00", end: "18:00", title: "Overdrive", desc: "Expert analysis on the day's biggest sports stories.", cat: "Sports, Talk Show" },
+          { start: "18:00", end: "19:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "19:00", end: "19:30", title: "TSN Hockey Top 50 Players Special", desc: "TSN breaks down the top 50 players in the NHL.", cat: "Sports, Hockey" },
+          { start: "19:30", end: "21:30", title: "MLS Soccer", desc: "The New York City FC hosts the New York Red Bulls at Yankee Stadium. NYCFC sits eighth in the East after going winless in four of its last five, while the Red Bulls sit 10th. The two teams drew 1-1 at Sports Illustrated Stadium in May.", cat: "Sports, Soccer" },
+          { start: "21:30", end: "22:30", title: "CFL Football", desc: "The Hamilton Tiger-Cats host the Montreal Alouettes in CFL Week 16. Montreal leads the East Division and arrives having beaten Hamilton, 31-18, in July. The Tiger-Cats have dropped three straight and sit third in the Eastern Conference.", cat: "Sports, Football" },
+          { start: "22:30", end: "00:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "00:00", end: "01:00", title: "The Amazing Race Canada", desc: "On the high-stakes season finale, the top three teams race to Calgary, Alberta for an action-packed showdown as they battle for the title of champions.", cat: "Travel, Game Shows" },
+          { start: "01:00", end: "02:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "02:00", end: "03:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "03:00", end: "04:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "04:00", end: "05:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" },
+          { start: "05:00", end: "06:00", title: "SportsCentre", desc: "TSN's flagship show providing news, highlights, analysis and interviews from the world of sports.", cat: "Sports, News" }
+        ]
+      },
+      {
+        id: "sportsnet-ontario",
+        name: "Sportsnet Ontario",
+        network: "sportsnet",
+        region: "ca",
+        sublabel: "Blue Jays & Leafs Coverage",
+        logoImg: LOGO_SN,
+        subBadge: "ON",
+        directUrl: "https://dlive.sx/watch.php?id=406",
+        schedule: [
+          { start: "06:00", end: "07:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "07:00", end: "08:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "08:00", end: "09:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "09:00", end: "10:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "10:00", end: "11:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "11:00", end: "12:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "12:00", end: "13:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "13:00", end: "14:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "14:00", end: "14:30", title: "Plays of the Month -- Highlights", desc: "Highlighting the past month's best in daily sports moments.", cat: "Sports, Anthology" },
+          { start: "14:30", end: "15:00", title: "Misplays of the Month", desc: "A look at the month's top bloopers.", cat: "Sports, Miscellaneous" },
+          { start: "15:00", end: "16:00", title: "Poker", desc: "Poker action from tournaments around the world.", cat: "Sports, Cards" },
+          { start: "16:00", end: "17:00", title: "Poker", desc: "Players from around the world gather to compete in a game of high stakes poker! Who will walk away with the jackpot?", cat: "Sports, Cards" },
+          { start: "17:00", end: "18:00", title: "Blair &amp; Barker", desc: "Jeff Blair and Kevin Barker talk all things Blue Jays, and Major League Baseball.", cat: "Sports, Baseball" },
+          { start: "18:00", end: "19:00", title: "The FAN Pregame", desc: "Ailish Forfar and Justin Cuthbert discuss the stories that matter most to sports fans.", cat: "Sports, Talk Show" },
+          { start: "19:00", end: "19:30", title: "MLB Plays of the Week", desc: "A look at the top plays and moments from the past week in baseball.", cat: "Sports, Baseball" },
+          { start: "19:30", end: "20:00", title: "Blue Jays Central", desc: "Toronto Blue Jays pregame show hosted by Jamie Campbell.", cat: "Sports, Baseball" },
+          { start: "20:00", end: "23:00", title: "MLB Baseball", desc: "The Blue Jays and the Rangers begin a three-game series at Globe Life Field. Texas leads the season series 4-0. Right-hander Spencer Arrighetti is the expected starter for the Blue Jays, while left-hander MacKenzie Gore starts for the Rangers.", cat: "Sports, Baseball" },
+          { start: "23:00", end: "00:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "00:00", end: "00:30", title: "MLB Plays of the Week", desc: "A look at the top plays and moments from the past week in baseball.", cat: "Sports, Baseball" },
+          { start: "00:30", end: "01:00", title: "Misplays of the Month", desc: "A look at the month's top bloopers.", cat: "Sports, Miscellaneous" },
+          { start: "01:00", end: "01:30", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "01:30", end: "02:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "02:00", end: "03:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "03:00", end: "04:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "04:00", end: "05:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "05:00", end: "06:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" }
+        ]
+      },
+      {
+        id: "sportsnet-east",
+        name: "Sportsnet East",
+        network: "sportsnet",
+        region: "ca",
+        sublabel: "Senators & Canadiens English",
+        logoImg: LOGO_SN,
+        subBadge: "EAST",
+        directUrl: "https://dlive.sx/watch.php?id=408",
+        schedule: [
+          { start: "06:00", end: "07:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "07:00", end: "08:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "08:00", end: "09:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "09:00", end: "10:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "10:00", end: "11:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "11:00", end: "12:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "12:00", end: "13:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "13:00", end: "14:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "14:00", end: "14:30", title: "Plays of the Month -- Highlights", desc: "Highlighting the past month's best in daily sports moments.", cat: "Sports, Anthology" },
+          { start: "14:30", end: "15:00", title: "Misplays of the Month", desc: "A look at the month's top bloopers.", cat: "Sports, Miscellaneous" },
+          { start: "15:00", end: "16:00", title: "Poker", desc: "Poker action from tournaments around the world.", cat: "Sports, Cards" },
+          { start: "16:00", end: "17:00", title: "Poker", desc: "Players from around the world gather to compete in a game of high stakes poker! Who will walk away with the jackpot?", cat: "Sports, Cards" },
+          { start: "17:00", end: "18:00", title: "Blair & Barker", desc: "Jeff Blair and Kevin Barker talk all things Blue Jays, and Major League Baseball.", cat: "Sports, Baseball" },
+          { start: "18:00", end: "19:00", title: "The FAN Pregame", desc: "Ailish Forfar and Justin Cuthbert discuss the stories that matter most to sports fans.", cat: "Sports, Talk Show" },
+          { start: "19:00", end: "19:30", title: "MLB Plays of the Week", desc: "A look at the top plays and moments from the past week in baseball.", cat: "Sports, Baseball" },
+          { start: "19:30", end: "20:00", title: "Blue Jays Central", desc: "Toronto Blue Jays pregame show hosted by Jamie Campbell.", cat: "Sports, Baseball" },
+          { start: "20:00", end: "23:00", title: "MLB Baseball", desc: "The Blue Jays and the Rangers begin a three-game series at Globe Life Field. Texas leads the season series 4-0. Right-hander Spencer Arrighetti is the expected starter for the Blue Jays, while left-hander MacKenzie Gore starts for the Rangers.", cat: "Sports, Baseball" },
+          { start: "23:00", end: "00:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "00:00", end: "00:30", title: "MLB Plays of the Week", desc: "A look at the top plays and moments from the past week in baseball.", cat: "Sports, Baseball" },
+          { start: "00:30", end: "01:00", title: "Misplays of the Month", desc: "A look at the month's top bloopers.", cat: "Sports, Miscellaneous" },
+          { start: "01:00", end: "01:30", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "01:30", end: "02:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "02:00", end: "03:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "03:00", end: "04:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "04:00", end: "05:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "05:00", end: "06:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" }
+        ]
+      },
+      {
+        id: "sportsnet-west",
+        name: "Sportsnet West",
+        network: "sportsnet",
+        region: "ca",
+        sublabel: "Flames & Oilers Regional",
+        logoImg: LOGO_SN,
+        subBadge: "WEST",
+        directUrl: "https://dlive.sx/watch.php?id=407",
+        schedule: [
+          { start: "06:00", end: "07:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "07:00", end: "08:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "08:00", end: "09:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "09:00", end: "10:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "10:00", end: "11:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "11:00", end: "12:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "12:00", end: "13:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "13:00", end: "14:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "14:00", end: "14:30", title: "Plays of the Month -- Highlights", desc: "Highlighting the past month's best in daily sports moments.", cat: "Sports, Anthology" },
+          { start: "14:30", end: "15:00", title: "Misplays of the Month", desc: "A look at the month's top bloopers.", cat: "Sports, Miscellaneous" },
+          { start: "15:00", end: "16:00", title: "Poker", desc: "Poker action from tournaments around the world.", cat: "Sports, Cards" },
+          { start: "16:00", end: "17:00", title: "Poker", desc: "Players from around the world gather to compete in a game of high stakes poker! Who will walk away with the jackpot?", cat: "Sports, Cards" },
+          { start: "17:00", end: "18:00", title: "Blair & Barker", desc: "Jeff Blair and Kevin Barker talk all things Blue Jays, and Major League Baseball.", cat: "Sports, Baseball" },
+          { start: "18:00", end: "19:00", title: "The FAN Pregame", desc: "Ailish Forfar and Justin Cuthbert discuss the stories that matter most to sports fans.", cat: "Sports, Talk Show" },
+          { start: "19:00", end: "19:30", title: "MLB Plays of the Week", desc: "A look at the top plays and moments from the past week in baseball.", cat: "Sports, Baseball" },
+          { start: "19:30", end: "20:00", title: "Blue Jays Central", desc: "Toronto Blue Jays pregame show hosted by Jamie Campbell.", cat: "Sports, Baseball" },
+          { start: "20:00", end: "23:00", title: "MLB Baseball", desc: "The Blue Jays and the Rangers begin a three-game series at Globe Life Field. Texas leads the season series 4-0. Right-hander Spencer Arrighetti is the expected starter for the Blue Jays, while left-hander MacKenzie Gore starts for the Rangers.", cat: "Sports, Baseball" },
+          { start: "23:00", end: "00:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "00:00", end: "00:30", title: "MLB Plays of the Week", desc: "A look at the top plays and moments from the past week in baseball.", cat: "Sports, Baseball" },
+          { start: "00:30", end: "01:00", title: "Misplays of the Month", desc: "A look at the month's top bloopers.", cat: "Sports, Miscellaneous" },
+          { start: "01:00", end: "01:30", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "01:30", end: "02:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "02:00", end: "03:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "03:00", end: "04:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "04:00", end: "05:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "05:00", end: "06:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" }
+        ]
+      },
+      {
+        id: "sportsnet-360",
+        name: "Sportsnet 360",
+        network: "sportsnet",
+        region: "ca",
+        sublabel: "Highlights, WWE & Multi-View",
+        logoImg: LOGO_SN,
+        subBadge: "360",
+        directUrl: "https://dlive.sx/watch.php?id=409",
+        schedule: [
+          { start: "06:00", end: "07:00", title: "Sportsnet Central", desc: "Canada's premier destination for sports and analysis.", cat: "Sports, News" },
+          { start: "07:00", end: "10:00", title: "By the Books", desc: "Host Dave Ross, with the latest betting information to get you set for your day.", cat: "Sports, Miscellaneous" },
+          { start: "10:00", end: "12:00", title: "Jays Talk Plus", desc: "Hosted by Blake Murphy.", cat: "Sports, Baseball" },
+          { start: "12:00", end: "14:00", title: "The Fan Hockey Show", desc: "Matt Marchese, Mike Futa and Elliotte Friedman share opinions, news and analysis.", cat: "Sports, Talk Show" },
+          { start: "14:00", end: "14:30", title: "Gotta See It", desc: "Must-see moments from the world of sports.", cat: "Sports, Miscellaneous" },
+          { start: "14:30", end: "15:00", title: "Plays of the Month -- Highlights", desc: "Highlighting the past month's best in daily sports moments.", cat: "Sports, Anthology" },
+          { start: "15:00", end: "15:30", title: "Gotta See It", desc: "Must-see moments from the world of sports.", cat: "Sports, Miscellaneous" },
+          { start: "15:30", end: "16:00", title: "Plays of the Month -- Highlights", desc: "Highlighting the past month's best in daily sports moments.", cat: "Sports, Anthology" },
+          { start: "16:00", end: "18:00", title: "Blair &amp; Barker", desc: "Jeff Blair and Kevin Barker talk all things Blue Jays, and Major League Baseball.", cat: "Sports, Baseball" },
+          { start: "18:00", end: "19:00", title: "The FAN Pregame", desc: "Ailish Forfar and Justin Cuthbert discuss the stories that matter most to sports fans.", cat: "Sports, Talk Show" },
+          { start: "19:00", end: "21:00", title: "TNA iMPACT!", desc: "Moose puts his career on the line against Frankie Kazarian; M By Elegance defends the Knockouts TV Title against Kiera Hogan, while Rich Swann battles LJ Cleary in an X-Division Qualifier!", cat: "Sports, Wrestling" },
+          { start: "21:00", end: "23:30", title: "Dana White's Contender Series", desc: "From Meta Apex in Las Vegas.", cat: "Sports, Martial Arts" },
+          { start: "23:30", end: "00:00", title: "Plays of the Month -- Highlights", desc: "Highlighting the past month's best in daily sports moments.", cat: "Sports, Anthology" },
+          { start: "00:00", end: "01:00", title: "No Gamble, No Future", desc: "Eric Persson, Jean-Robert Bellande, Patrik Antonius, Sean Perry, Lynne Ji, Maria Ho, Eli Elezra, Jimmy D'Ambrosio, Dylan DeStefano, Nick Schulman, Krish Menon, David Williams, Alan Keating and Boston Rob Mariano play a variety of stakes.", cat: "Sports, Cards" },
+          { start: "01:00", end: "01:30", title: "MLB Plays of the Week", desc: "A look at the top plays and moments from the past week in baseball.", cat: "Sports, Baseball" },
+          { start: "01:30", end: "02:00", title: "Plays of the Month -- Highlights", desc: "Highlighting the past month's best in daily sports moments.", cat: "Sports, Anthology" },
+          { start: "02:00", end: "02:30", title: "MLB Plays of the Week", desc: "A look at the top plays and moments from the past week in baseball.", cat: "Sports, Baseball" },
+          { start: "02:30", end: "03:00", title: "Plays of the Month -- Highlights", desc: "Highlighting the past month's best in daily sports moments.", cat: "Sports, Anthology" },
+          { start: "03:00", end: "03:30", title: "MLB Plays of the Week", desc: "A look at the top plays and moments from the past week in baseball.", cat: "Sports, Baseball" },
+          { start: "03:30", end: "04:00", title: "Plays of the Month -- Highlights", desc: "Highlighting the past month's best in daily sports moments.", cat: "Sports, Anthology" },
+          { start: "04:00", end: "04:30", title: "MLB Plays of the Week", desc: "A look at the top plays and moments from the past week in baseball.", cat: "Sports, Baseball" },
+          { start: "04:30", end: "05:00", title: "Plays of the Month -- Highlights", desc: "Highlighting the past month's best in daily sports moments.", cat: "Sports, Anthology" },
+          { start: "05:00", end: "05:30", title: "MLB Plays of the Week", desc: "A look at the top plays and moments from the past week in baseball.", cat: "Sports, Baseball" },
+          { start: "05:30", end: "06:00", title: "Plays of the Month -- Highlights", desc: "Highlighting the past month's best in daily sports moments.", cat: "Sports, Anthology" }
+        ]
+      },
+      {
+        id: "sportsnet-pacific",
+        name: "Sportsnet Pacifique",
+        network: "sportsnet",
+        region: "ca",
+        sublabel: "Sports & Événements nationaux",
+        logoImg: LOGO_SN,
+        subBadge: "PAC",
+        directUrl: "https://dlive.sx/watch.php?id=410",
+        schedule: [
+          { start: "06:00", end: "08:00", title: "Premier League Review", desc: "Highlights and analysis from England.", cat: "Soccer" },
+          { start: "08:00", end: "10:00", title: "Bundesliga Highlights Show", desc: "Top goals and action from Germany.", cat: "Soccer" },
+          { start: "10:00", end: "12:00", title: "Super Rugby Pacific", desc: "Southern hemisphere club rugby union action.", cat: "Rugby" },
+          { start: "12:00", end: "14:00", title: "Premiership Rugby Highlights", desc: "Action from the Gallagher Premiership.", cat: "Rugby" },
+          { start: "14:00", end: "16:00", title: "UEFA Champions League Magazine", desc: "Interviews and tactical breakdowns.", cat: "Soccer" },
+          { start: "16:00", end: "18:00", title: "World Rugby Sevens Series", desc: "Fast-paced sevens tournament action.", cat: "Rugby" },
+          { start: "18:00", end: "20:00", title: "Premier League Today Live", desc: "Pre-match tactical discussion and lineup cards.", cat: "Soccer" },
+          { start: "20:00", end: "22:00", title: "Sportsnet Central World", desc: "Global sports report and football highlights.", cat: "Highlights" },
+          { start: "22:00", end: "01:00", title: "International Rugby Replay", desc: "Full match rebroadcast.", cat: "Rugby" },
+          { start: "01:00", end: "06:00", title: "World Sport Overnight", desc: "Continuous international football and rugby.", cat: "Rebroadcast" }
+        ]
+      }
+    ];
+
+
+    // ========================================================
+    // LOGIQUE DE VRAIS MATCHS EN DIRECT (ESPN LIVE FETCH)
+    // ========================================================
+    let realMatchesData = [];
+    let activeSportFilter = 'all';
+    let activeDayFilter = 'all'; // 'all', 'today', 'tomorrow'
+    let activeStateFilter = 'all';
+    let activeSearchQuery = '';
+    let lastSyncDate = null;
+
+    // Normalisation de chaînes (sans accents, minuscules, ponctuation épurée)
+    function normalizeStr(str) {
+      if (!str) return '';
+      return str.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9\s]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    // Détection robuste et vérifiée de la chaîne de diffusion canadienne via le guide EPG officiel (TV Passport)
+    function findBroadcastChannelForGame(sportKey, homeComp, awayComp, eventDateObj) {
+      const homeTeam = homeComp?.team || {};
+      const awayTeam = awayComp?.team || {};
+
+      const homeFull = normalizeStr(homeTeam.displayName || '');
+      const awayFull = normalizeStr(awayTeam.displayName || '');
+      const homeNick = normalizeStr(homeTeam.name || homeTeam.shortDisplayName || '');
+      const awayNick = normalizeStr(awayTeam.name || awayTeam.shortDisplayName || '');
+      const homeLoc  = normalizeStr(homeTeam.location || '');
+      const awayLoc  = normalizeStr(awayTeam.location || '');
+
+      // Heure locale du match en minutes (0 à 1440)
+      const gameMinutes = eventDateObj.getHours() * 60 + eventDateObj.getMinutes();
+
+      let candidateChannels = [];
+
+      SPORTS_CHANNELS.forEach(chConfig => {
+        // Obtenir la grille EPG de la chaîne (données fraîches TV Passport)
+        const shows = (window.epgLiveChannels && window.epgLiveChannels[chConfig.id]) || chConfig.schedule || [];
+
+        for (const s of shows) {
+          const normTitle = normalizeStr(s.title || '');
+          const normDesc  = normalizeStr(s.desc || '');
+          const normT1    = normalizeStr(s.team1 || '');
+          const normT2    = normalizeStr(s.team2 || '');
+
+          // 1. Correspondance directe sur les balises d'équipes de TV Passport (data-team1 et data-team2)
+          let directAttrMatch = false;
+          if (normT1 && normT2) {
+            const t1MatchesAway = (awayNick && normT1.includes(awayNick)) || (awayLoc && normT1.includes(awayLoc)) || (awayFull && normT1.includes(awayFull)) || awayFull.includes(normT1);
+            const t1MatchesHome = (homeNick && normT1.includes(homeNick)) || (homeLoc && normT1.includes(homeLoc)) || (homeFull && normT1.includes(homeFull)) || homeFull.includes(normT1);
+            const t2MatchesAway = (awayNick && normT2.includes(awayNick)) || (awayLoc && normT2.includes(awayLoc)) || (awayFull && normT2.includes(awayFull)) || awayFull.includes(normT2);
+            const t2MatchesHome = (homeNick && normT2.includes(homeNick)) || (homeLoc && normT2.includes(homeLoc)) || (homeFull && normT2.includes(homeFull)) || homeFull.includes(normT2);
+
+            directAttrMatch = (t1MatchesAway && t2MatchesHome) || (t1MatchesHome && t2MatchesAway);
+          }
+
+          // 2. Correspondance dans le titre ou la description (ex: "Blue Jays vs Rangers")
+          const titleHasHome = (homeNick && normTitle.includes(homeNick)) || (homeFull && normTitle.includes(homeFull)) || (homeNick && normDesc.includes(homeNick));
+          const titleHasAway = (awayNick && normTitle.includes(awayNick)) || (awayFull && normTitle.includes(awayFull)) || (awayNick && normDesc.includes(awayNick));
+          const titleBoth = (titleHasHome && titleHasAway);
+
+          if (directAttrMatch || titleBoth) {
+            const [sH, sM] = (s.start || "00:00").split(':').map(Number);
+            const [eH, eM] = (s.end || "00:00").split(':').map(Number);
+            const startMin = sH * 60 + sM;
+            let endMin = eH * 60 + eM;
+            if (endMin < startMin) endMin += 24 * 60; // Dépassement de minuit
+
+            const timeDiff = Math.abs(startMin - gameMinutes);
+            const duringShow = (gameMinutes >= startMin - 45 && gameMinutes <= endMin + 30);
+
+            // Valider uniquement si l'émission est en direct ou proche de l'heure programmée (max 2h d'écart)
+            if (s.isLive || timeDiff <= 120 || duringShow) {
+              candidateChannels.push({
+                id: chConfig.id,
+                name: chConfig.name,
+                directUrl: chConfig.directUrl,
+                network: chConfig.network,
+                isLive: Boolean(s.isLive),
+                timeDiff: timeDiff,
+                start: s.start,
+                end: s.end
+              });
+            }
+          }
+        }
+      });
+
+      if (candidateChannels.length === 0) {
+        return {
+          hasChannel: false,
+          channelName: null,
+          channelUrl: null,
+          allChannelsSummary: null
+        };
+      }
+
+      // Priorisation intelligente :
+      // 1. Les diffusions en direct (isLive) en priorité absolue sur les rediffusions
+      // 2. Le créneau horaire le plus proche du coup d'envoi
+      // 3. Chaînes francophones québécoises (RDS, TVA Sports) en tête si co-diffusé
+      candidateChannels.sort((a, b) => {
+        if (a.isLive !== b.isLive) return a.isLive ? -1 : 1;
+        if (Math.abs(a.timeDiff - b.timeDiff) > 60) return a.timeDiff - b.timeDiff;
+        const aIsFr = (a.network === 'rds' || a.network === 'tva');
+        const bIsFr = (b.network === 'rds' || b.network === 'tva');
+        if (aIsFr !== bIsFr) return aIsFr ? -1 : 1;
+        return a.timeDiff - b.timeDiff;
+      });
+
+      const uniqueNames = [...new Set(candidateChannels.map(c => c.name))];
+      const primary = candidateChannels[0];
+
+      return {
+        hasChannel: true,
+        channelName: primary.name,
+        channelUrl: primary.directUrl,
+        allChannelsSummary: uniqueNames.length > 1 ? uniqueNames.slice(0, 2).join(' / ') : primary.name,
+        isLiveBroadcast: primary.isLive
+      };
+    }
+
+    // Synchronisation automatique de la grille horaire TV (Page 1) avec TV Passport (données réelles)
+    async function syncEPGWithRealGames() {
+      try {
+        const res = await fetch('/api/live-epg.json');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.channels) {
+            window.epgLiveChannels = data.channels;
+            for (const [chId, events] of Object.entries(data.channels)) {
+              const ch = SPORTS_CHANNELS.find(c => c.id === chId);
+              if (ch && events.length > 0) {
+                // REMPLACER complètement les horaires statiques par les données TV Passport réelles
+                ch.schedule = events.map(ev => ({
+                  start: ev.start,
+                  end:   ev.end,
+                  title: ev.title,
+                  desc:  ev.desc || '',
+                  cat:   ev.cat || 'Sport',
+                  isLive: ev.isLive || false,
+                  team1: ev.team1 || '',
+                  team2: ev.team2 || '',
+                  league: ev.league || ''
+                }));
+              }
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("[EPG Local] Mode hors-ligne ou erreur:", err);
+      }
+
+      // Re-rendre la grille EPG mise à jour avec les vrais événements
+      filterAndRender();
+    }
+
+    async function fetchLiveScoreboards() {
+      const statusText = document.getElementById('sync-text');
+      const refreshBtn = document.getElementById('btn-header-refresh');
+      if (refreshBtn) refreshBtn.classList.add('spinning');
+      if (statusText) statusText.innerHTML = "⏳ Actualisation des données TV et des matchs en direct...";
+
+      // 1. D'abord, charger les données réelles du guide EPG (TV Passport)
+      await syncEPGWithRealGames();
+
+      // Fenêtre temporelle STRICTE : Aujourd'hui et Demain (max 48h)
+      const now = new Date();
+      const startWindow = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0).getTime() - (6 * 3600 * 1000);
+      const endWindow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 23, 59, 59, 999).getTime();
+
+      const leaguesToFetch = [
+        { key: "mlb", label: "⚾ MLB", badge: "badge-mlb", url: "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard" },
+        { key: "nfl", label: "🏈 NFL", badge: "badge-nfl", url: "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard" },
+        { key: "nhl", label: "🏒 LNH", badge: "badge-nhl", url: "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard" },
+        { key: "nba", label: "🏀 NBA", badge: "badge-nba", url: "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard" }
+      ];
+
+      let fetchedList = [];
+
+      for (const lg of leaguesToFetch) {
+        try {
+          const res = await fetch(lg.url);
+          if (res.ok) {
+            const data = await res.json();
+            (data.events || []).forEach(e => {
+              const comp = e.competitions?.[0];
+              if (!comp) return;
+
+              // FILTRE STRICT 2 JOURS : ignorer tout événement hors d'aujourd'hui ou demain
+              const eventDateObj = new Date(e.date);
+              const eventTime = eventDateObj.getTime();
+              if (isNaN(eventTime) || eventTime < startWindow || eventTime > endWindow) {
+                return; // Exclus car au-delà des 2 jours
+              }
+
+              const home = comp.competitors?.find(c => c.homeAway === 'home') || comp.competitors?.[0];
+              const away = comp.competitors?.find(c => c.homeAway === 'away') || comp.competitors?.[1];
+              if (!home || !away) return;
+
+              const state = e.status?.type?.state || 'pre';
+              const detail = e.status?.type?.detail || e.status?.type?.shortDetail || 'Programmé';
+
+              let statusLabel = detail;
+              let statusClass = 'pre';
+              if (state === 'in') {
+                statusLabel = `🔴 EN DIRECT • ${detail}`;
+                statusClass = 'live';
+              } else if (state === 'post') {
+                statusLabel = `✅ TERMINÉ • ${detail}`;
+                statusClass = 'final';
+              } else {
+                statusLabel = `⏱️ ${detail}`;
+              }
+
+              const isToday = (eventDateObj.getDate() === now.getDate() && eventDateObj.getMonth() === now.getMonth());
+              const dayTag = isToday ? 'today' : 'tomorrow';
+              const formattedTime = eventDateObj.toLocaleTimeString('fr-CA', { hour: '2-digit', minute: '2-digit' });
+
+              // Détection 100% fiable de la chaîne de diffusion en croisant avec le guide EPG
+              const broadcastInfo = findBroadcastChannelForGame(lg.key, home, away, eventDateObj);
+
+              fetchedList.push({
+                id: e.id,
+                sport: lg.key,
+                sportLabel: lg.label,
+                badgeClass: lg.badge,
+                homeTeam: home.team?.displayName || 'Équipe locale',
+                homeScore: home.score || (state === 'pre' ? '-' : '0'),
+                homeLogo: home.team?.logo || 'https://a.espncdn.com/i/teamlogos/default-team-logo-500.png',
+                awayTeam: away.team?.displayName || 'Équipe visiteuse',
+                awayScore: away.score || (state === 'pre' ? '-' : '0'),
+                awayLogo: away.team?.logo || 'https://a.espncdn.com/i/teamlogos/default-team-logo-500.png',
+                status: statusClass,
+                statusLabel: statusLabel,
+                venue: comp.venue?.fullName || (comp.venue?.address?.city ? comp.venue.address.city : 'Aréna officielle'),
+                date: e.date,
+                isToday: isToday,
+                dayTag: dayTag,
+                timeFormatted: formattedTime,
+                hasBroadcastChannel: Boolean(broadcastInfo && broadcastInfo.hasChannel),
+                broadcastChannelName: broadcastInfo?.channelName || 'Non diffusé',
+                broadcastChannelUrl: broadcastInfo?.channelUrl || null,
+                broadcastChannelSummary: broadcastInfo?.allChannelsSummary || 'Non disponible au guide'
+              });
+            });
+          }
+        } catch (err) {
+          console.warn("Erreur fetch live:", lg.key, err);
+        }
+      }
+
+      realMatchesData = fetchedList;
+      lastSyncDate = new Date();
+
+      // Mise à jour de l'UI
+      const countEl = document.getElementById('events-total-badge');
+      if (countEl) countEl.textContent = `${realMatchesData.length} matchs (2 jours)`;
+
+      const syncTimeStr = lastSyncDate.toLocaleTimeString('fr-CA', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      if (statusText) {
+        statusText.innerHTML = `🟢 Synchronisé en direct (${syncTimeStr}) • <strong>${realMatchesData.length} vrais matchs</strong> répertoriés sur 2 jours`;
+      }
+
+      if (refreshBtn) {
+        setTimeout(() => refreshBtn.classList.remove('spinning'), 400);
+      }
+
+      renderRealEvents();
+    }
+
+    function forceRefreshAll() {
+      fetchLiveScoreboards();
+      updateClock();
+      jumpToNow();
+    }
+
+    function filterByState(state) {
+      activeStateFilter = state;
+      renderRealEvents();
+    }
+
+    function renderRealEvents() {
+      const container = document.getElementById('events-grid');
+      const filtered = realMatchesData.filter(m => {
+        const matchesSport = (activeSportFilter === 'all' || m.sport === activeSportFilter);
+        const matchesDay = (activeDayFilter === 'all' || m.dayTag === activeDayFilter);
+        const matchesState = (activeStateFilter === 'all' || m.status === activeStateFilter);
+        const matchesSearch = 
+          m.homeTeam.toLowerCase().includes(activeSearchQuery) ||
+          m.awayTeam.toLowerCase().includes(activeSearchQuery) ||
+          (m.broadcastChannelSummary && m.broadcastChannelSummary.toLowerCase().includes(activeSearchQuery)) ||
+          (m.broadcastChannelName && m.broadcastChannelName.toLowerCase().includes(activeSearchQuery)) ||
+          m.venue.toLowerCase().includes(activeSearchQuery);
+        return matchesSport && matchesDay && matchesState && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--text-dim);">
+            <p style="font-size: 1.5rem; margin-bottom: 8px;">🔍 Aucun match dans cette période (2 jours max)</p>
+            <p style="font-size: 0.95rem;">Modifie les filtres ci-dessus ou sélectionne un autre sport.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const nowTime = Date.now();
+
+      container.innerHTML = filtered.map(m => {
+        const isLive = m.status === 'live';
+        const isFinal = m.status === 'final';
+        const gameStartTime = new Date(m.date).getTime();
+        const hasReachedMatchTime = (nowTime >= gameStartTime);
+
+        let footerContent = '';
+        if (m.hasBroadcastChannel) {
+          // La partie est diffusée sur une chaîne locale vérifiée
+          if ((hasReachedMatchTime || isLive) && !isFinal) {
+            // Rendu à l'heure du match -> Bouton Regarder ACTIF
+            footerContent = `
+              <div class="match-footer">
+                <div class="broadcast-badge">
+                  <span>📺 En direct sur</span>
+                  <span class="channel-pill-tag">${m.broadcastChannelSummary}</span>
+                </div>
+
+                <a href="${m.broadcastChannelUrl}" target="_blank" rel="noopener noreferrer" class="match-action-btn">
+                  <span>▶ Regarder sur ${m.broadcastChannelName}</span>
+                </a>
+              </div>
+            `;
+          } else if (isFinal) {
+            // Match terminé
+            footerContent = `
+              <div class="match-footer">
+                <div class="broadcast-badge">
+                  <span>📺 Était diffusé sur</span>
+                  <span class="channel-pill-tag">${m.broadcastChannelSummary}</span>
+                </div>
+
+                <div class="match-ended-pill">
+                  <span>✅ Match terminé</span>
+                </div>
+              </div>
+            `;
+          } else {
+            // Avant l'heure du match -> PAS de bouton regarder, notification d'attente
+            footerContent = `
+              <div class="match-footer">
+                <div class="broadcast-badge">
+                  <span>📺 Prévu sur</span>
+                  <span class="channel-pill-tag">${m.broadcastChannelSummary}</span>
+                </div>
+
+                <div class="match-wait-pill">
+                  <span>⏱️ Bouton disponible à ${m.timeFormatted}</span>
+                </div>
+              </div>
+            `;
+          }
+        } else {
+          // Aucun poste du guide ne diffuse cette partie -> AUCUN BOUTON REGARDER
+          footerContent = `
+            <div class="match-footer no-broadcast">
+              <div class="broadcast-badge unavail">
+                <span>📺 Chaîne locale</span>
+                <span class="channel-pill-tag unavail">Non disponible au guide</span>
+              </div>
+
+              <div class="match-na-pill">
+                <span>Non diffusé</span>
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="match-card">
+            <div>
+              <div class="match-card-top">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span class="league-badge ${m.badgeClass}">${m.sportLabel}</span>
+                  <span class="day-badge ${m.dayTag}">${m.isToday ? '☀️ Aujourd\'hui' : '🌙 Demain'} • ${m.timeFormatted}</span>
+                </div>
+                <span class="match-status-tag ${m.status}">
+                  ${isLive ? '<span class="live-dot" style="background:#ef4444; width:6px; height:6px;"></span>' : ''}
+                  ${m.statusLabel}
+                </span>
+              </div>
+
+              <div class="scoreboard">
+                <div class="team-row">
+                  <div class="team-info">
+                    <img src="${m.awayLogo}" alt="${m.awayTeam}" class="team-logo" onerror="this.src='https://a.espncdn.com/i/teamlogos/default-team-logo-500.png'">
+                    <span class="team-name">${m.awayTeam}</span>
+                  </div>
+                  <div class="team-score">${m.awayScore}</div>
+                </div>
+
+                <div class="team-row">
+                  <div class="team-info">
+                    <img src="${m.homeLogo}" alt="${m.homeTeam}" class="team-logo" onerror="this.src='https://a.espncdn.com/i/teamlogos/default-team-logo-500.png'">
+                    <span class="team-name">${m.homeTeam}</span>
+                  </div>
+                  <div class="team-score">${m.homeScore}</div>
+                </div>
+              </div>
+
+              <div style="font-size: 0.78rem; color: var(--text-dim); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                <span>📍 ${m.venue}</span>
+              </div>
+            </div>
+
+            ${footerContent}
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Filtres par sport
+    document.querySelectorAll('[data-sport]').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('[data-sport]').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        activeSportFilter = pill.dataset.sport;
+        renderRealEvents();
+      });
+    });
+
+    // Filtres par jour (2 jours max)
+    document.querySelectorAll('[data-day]').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('[data-day]').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        activeDayFilter = pill.dataset.day;
+        renderRealEvents();
+      });
+    });
+
+    // Recherche de match
+    document.getElementById('events-search').addEventListener('input', (e) => {
+      activeSearchQuery = e.target.value.toLowerCase().trim();
+      renderRealEvents();
+    });
+
+    function selectPageTab(tabName) {
+      const guideSection = document.getElementById('section-guide-tv');
+      const eventsSection = document.getElementById('section-events');
+      const tabGuide = document.getElementById('tab-nav-guide');
+      const tabEvents = document.getElementById('tab-nav-events');
+
+      if (tabName === 'guide') {
+        guideSection.style.display = 'block';
+        eventsSection.style.display = 'none';
+        tabGuide.classList.add('active');
+        tabEvents.classList.remove('active');
+        setTimeout(() => {
+          if (!userHasManuallyScrolled) {
+            jumpToNow(false);
+          }
+        }, 40);
+      } else {
+        guideSection.style.display = 'none';
+        eventsSection.style.display = 'flex';
+        tabGuide.classList.remove('active');
+        tabEvents.classList.add('active');
+        if (realMatchesData.length === 0) {
+          fetchLiveScoreboards();
+        } else {
+          renderRealEvents();
+        }
+      }
+    }
+
+    // ========================================================
+    // LOGIQUE DE POSITIONNEMENT ET DÉFILEMENT (24 HEURES)
+    // ========================================================
+    let userHasManuallyScrolled = false;
+
+    function timeToMinutes(timeStr) {
+      const [h, m] = timeStr.split(':').map(Number);
+      let adjustedH = h;
+      if (adjustedH < START_HOUR) adjustedH += 24;
+      return (adjustedH - START_HOUR) * 60 + m;
+    }
+
+    function getCurrentMinutesOffset() {
+      const now = new Date();
+      let h = now.getHours();
+      let m = now.getMinutes();
+      if (h < START_HOUR) h += 24;
+      return (h - START_HOUR) * 60 + m;
+    }
+
+    function buildTimelineRuler() {
+      const ruler = document.getElementById('timeline-ruler');
+      let html = '';
+      for (let h = START_HOUR; h < END_HOUR; h++) {
+        const displayH = (h >= 24 ? h - 24 : h).toString().padStart(2, '0');
+        html += `<div class="time-slot-header">${displayH}:00</div>`;
+        html += `<div class="time-slot-header">${displayH}:30</div>`;
+      }
+      ruler.innerHTML = html;
+    }
+
+    function updateTimeMarker() {
+      const marker = document.getElementById('current-time-marker');
+      if (!marker) return;
+      const nowMinutes = getCurrentMinutesOffset();
+      marker.style.left = (nowMinutes * PIXELS_PER_MINUTE) + 'px';
+    }
+
+    function applyScroll(viewport, targetScroll, isSmooth = false) {
+      if (!viewport) return;
+      if (isSmooth) {
+        viewport.scrollTo({ left: targetScroll, behavior: 'smooth' });
+      } else {
+        viewport.scrollLeft = targetScroll;
+      }
+    }
+
+    function jumpToNow(isSmooth = false) {
+      const viewport = document.getElementById('grid-viewport');
+      if (!viewport) return;
+
+      const nowMin = getCurrentMinutesOffset();
+      const nowPixel = nowMin * PIXELS_PER_MINUTE;
+      // Centrer l'heure actuelle exactement au milieu de l'affichage du guide
+      const visibleWidth = viewport.clientWidth || 1000;
+      const scrollPos = Math.max(0, Math.round(nowPixel - (visibleWidth / 2)));
+
+      applyScroll(viewport, scrollPos, isSmooth);
+      updateTimeMarker();
+    }
+
+    function onClickNowButton() {
+      userHasManuallyScrolled = false;
+      jumpToNow(true);
+    }
+
+    function scrollTimelineToHour(hour) {
+      userHasManuallyScrolled = true;
+      let adjustedH = hour < START_HOUR ? hour + 24 : hour;
+      const minutes = (adjustedH - START_HOUR) * 60;
+      const targetPixel = minutes * PIXELS_PER_MINUTE;
+      const viewport = document.getElementById('grid-viewport');
+      if (viewport) {
+        // Positionner l'heure sélectionnée avec une marge confortable pour voir les émissions qui commencent et se terminent
+        const scrollPos = Math.max(0, Math.round(targetPixel - 60));
+        applyScroll(viewport, scrollPos, true);
+      }
+    }
+
+    function setupRowHoverSync() {
+      document.querySelectorAll('.channel-cell').forEach(cell => {
+        const chId = cell.dataset.ch;
+        cell.onmouseenter = () => {
+          document.querySelector(`.shows-track[data-ch="${chId}"]`)?.classList.add('is-hovered');
+        };
+        cell.onmouseleave = () => {
+          document.querySelector(`.shows-track[data-ch="${chId}"]`)?.classList.remove('is-hovered');
+        };
+      });
+
+      document.querySelectorAll('.shows-track').forEach(track => {
+        const chId = track.dataset.ch;
+        track.onmouseenter = () => {
+          document.querySelector(`.channel-cell[data-ch="${chId}"]`)?.classList.add('is-hovered');
+        };
+        track.onmouseleave = () => {
+          document.querySelector(`.channel-cell[data-ch="${chId}"]`)?.classList.remove('is-hovered');
+        };
+      });
+    }
+
+    function renderEPGGrid(channels) {
+      const channelsListContainer = document.getElementById('epg-channels-list');
+      const showsContainer = document.getElementById('epg-shows-container');
+      const nowMinutes = getCurrentMinutesOffset();
+
+      let channelsHtml = '';
+      let showsHtmlTotal = '';
+
+      channels.forEach(ch => {
+        let showsRowHtml = '';
+        ch.schedule.forEach(show => {
+          const startMin = timeToMinutes(show.start);
+          const endMin = timeToMinutes(show.end);
+          const duration = Math.max(15, endMin - startMin);
+          const widthPx = duration * PIXELS_PER_MINUTE - 4;
+
+          const isLiveNow = (nowMinutes >= startMin && nowMinutes < endMin);
+
+          showsRowHtml += `
+            <div class="show-block ${isLiveNow ? 'is-live' : ''}" 
+                 style="width: ${widthPx}px;" 
+                 onclick="openModal('${ch.id}', '${show.start}', '${show.end}')"
+                 title="${show.title}">
+              <div class="show-inner-sticky">
+                <div class="show-time">
+                  <span>${show.start} - ${show.end}</span>
+                  ${isLiveNow ? '<span class="show-live-tag"><span class="live-dot" style="width:6px; height:6px;"></span> DIRECT</span>' : ''}
+                </div>
+                <div class="show-title">${show.title}</div>
+                <div class="show-category">${show.cat}</div>
+              </div>
+            </div>
+          `;
+        });
+
+        // 1. Colonne fixe à gauche : Logo, Nom, Badge et Bouton Regarder
+        channelsHtml += `
+          <div class="channel-cell" data-ch="${ch.id}" data-network="${ch.network}">
+            <div class="channel-info-block">
+              <div class="channel-logo-wrapper" title="${ch.name}">
+                <img src="${ch.logoImg}" alt="${ch.name}" class="channel-logo-img" width="42" height="36" decoding="sync" loading="eager" style="width:42px; height:36px; display:block;">
+                ${ch.subBadge ? `<span class="channel-sub-badge ${ch.network}">${ch.subBadge}</span>` : ''}
+              </div>
+              <div class="channel-cell-details">
+                <div class="channel-cell-name">${ch.name}</div>
+                <span class="channel-cell-cat">${ch.sublabel}</span>
+              </div>
+            </div>
+            <a href="${ch.directUrl}" target="_blank" rel="noopener noreferrer" class="btn-watch-direct" title="Lancer le direct de ${ch.name}">
+              ▶ Regarder
+            </a>
+          </div>
+        `;
+
+        // 2. Zone droite : Piste défilante des émissions pour cette chaîne
+        showsHtmlTotal += `
+          <div class="shows-track" data-ch="${ch.id}" data-network="${ch.network}">
+            ${showsRowHtml}
+          </div>
+        `;
+      });
+
+      if (channelsListContainer) channelsListContainer.innerHTML = channelsHtml;
+      if (showsContainer) showsContainer.innerHTML = showsHtmlTotal;
+
+      updateTimeMarker();
+      setupRowHoverSync();
+
+      const viewport = document.getElementById('grid-viewport');
+      const prevScroll = viewport ? viewport.scrollLeft : 0;
+
+      if (viewport) {
+        if (userHasManuallyScrolled && prevScroll > 10) {
+          applyScroll(viewport, prevScroll, false);
+        } else {
+          jumpToNow(false);
+        }
+      }
+    }
+
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('live-clock').textContent = now.toLocaleTimeString('fr-CA', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function openModal(channelId, start, end) {
+      const ch = SPORTS_CHANNELS.find(c => c.id === channelId);
+      if (!ch) return;
+      const show = ch.schedule.find(s => s.start === start && s.end === end);
+      if (!show) return;
+
+      document.getElementById('m-logo-img').src = ch.logoImg;
+      document.getElementById('m-logo-img').alt = ch.name;
+      document.getElementById('m-channel-tag').textContent = ch.name;
+      document.getElementById('m-time-tag').textContent = `${show.start} à ${show.end} (${show.cat})`;
+      document.getElementById('m-title').textContent = show.title;
+      document.getElementById('m-desc').textContent = show.desc;
+
+      const watchBtn = document.getElementById('m-watch-btn');
+      watchBtn.href = ch.directUrl;
+      document.getElementById('m-channel-name-btn').textContent = ch.name;
+
+      document.getElementById('modal-overlay').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('modal-overlay').style.display = 'none';
+    }
+
+    let currentFilter = 'all';
+    let currentSearchTerm = '';
+
+    function filterAndRender() {
+      const filtered = SPORTS_CHANNELS.filter(ch => {
+        let matchesCategory = false;
+        if (currentFilter === 'all') matchesCategory = true;
+        else if (currentFilter === 'qc') matchesCategory = (ch.region === 'qc');
+        else if (currentFilter === 'ca') matchesCategory = (ch.region === 'ca');
+        else matchesCategory = (ch.network === currentFilter);
+
+        const matchesSearch = 
+          ch.name.toLowerCase().includes(currentSearchTerm) ||
+          ch.sublabel.toLowerCase().includes(currentSearchTerm) ||
+          ch.schedule.some(s => s.title.toLowerCase().includes(currentSearchTerm) || s.desc.toLowerCase().includes(currentSearchTerm));
+
+        return matchesCategory && matchesSearch;
+      });
+
+      const countEl = document.getElementById('channels-count');
+      if (countEl) {
+        countEl.textContent = `${filtered.length} chaîne${filtered.length > 1 ? 's' : ''} affichée${filtered.length > 1 ? 's' : ''}`;
+      }
+
+      renderEPGGrid(filtered);
+    }
+
+    document.querySelectorAll('[data-filter]').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('[data-filter]').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        currentFilter = pill.dataset.filter;
+        filterAndRender();
+      });
+    });
+
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      currentSearchTerm = e.target.value.toLowerCase().trim();
+      filterAndRender();
+    });
+
+    // Détecter les interactions manuelles de l'utilisateur sur le scroll
+    const viewportEl = document.getElementById('grid-viewport');
+    if (viewportEl) {
+      const markManual = () => {
+        userHasManuallyScrolled = true;
+      };
+      viewportEl.addEventListener('wheel', markManual, { passive: true });
+      viewportEl.addEventListener('touchstart', markManual, { passive: true });
+      viewportEl.addEventListener('pointerdown', (e) => {
+        if (e.target === viewportEl || e.target.classList.contains('grid-viewport-wrapper')) {
+          userHasManuallyScrolled = true;
+        }
+      });
+    }
+
+    // Initialisation au lancement
+    buildTimelineRuler();
+    filterAndRender();
+    jumpToNow(false);
+
+    syncEPGWithRealGames();
+    fetchLiveScoreboards();
+
+    // Répétitions programmées au lancement pour garantir le calage immédiat à l'heure actuelle
+    // après le chargement des polices, logos SVG et reflow complet dans Google Chrome
+    [40, 100, 250, 500, 900, 1500, 2200].forEach(delay => {
+      setTimeout(() => {
+        if (!userHasManuallyScrolled) {
+          jumpToNow(false);
+        }
+      }, delay);
+    });
+
+    window.addEventListener('load', () => {
+      if (!userHasManuallyScrolled) {
+        jumpToNow(false);
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (!userHasManuallyScrolled) {
+        jumpToNow(false);
+      }
+    });
+
+    // RAFFRAÎCHISSEMENT CONTINU EN ARRIÈRE-PLAN :
+    // 1. Re-synchronise tous les matchs et le guide toutes les 45 secondes
+    setInterval(fetchLiveScoreboards, 45000);
+
+    // 2. Re-vérifie les heures de coup d'envoi toutes les 30 secondes pour activer le bouton Regarder à la seconde où le match débute
+    setInterval(renderRealEvents, 30000);
+
+    // 3. Met à jour la ligne temporelle rouge toutes les 15 secondes
+    setInterval(updateTimeMarker, 15000);
+  </script>
+</body>
+</html>
