@@ -2414,6 +2414,7 @@
 
       return {
         hasChannel: true,
+        channelId: primary.id,
         channelName: primary.name,
         channelUrl: primary.directUrl,
         allChannelsSummary: uniqueNames.length > 1 ? uniqueNames.slice(0, 2).join(' / ') : primary.name,
@@ -2474,6 +2475,7 @@
         { key: "mlb", label: "⚾ MLB", badge: "badge-mlb", url: "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/scoreboard" },
         { key: "nfl", label: "🏈 NFL", badge: "badge-nfl", url: "https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard" },
         { key: "nhl", label: "🏒 LNH", badge: "badge-nhl", url: "https://site.api.espn.com/apis/site/v2/sports/hockey/nhl/scoreboard" },
+        { key: "cfl", label: "🍁 CFL", badge: "badge-cfl", url: "https://site.api.espn.com/apis/site/v2/sports/football/cfl/scoreboard" },
         { key: "nba", label: "🏀 NBA", badge: "badge-nba", url: "https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard" }
       ];
 
@@ -2488,10 +2490,13 @@
               const comp = e.competitions?.[0];
               if (!comp) return;
 
-              // FILTRE STRICT 2 JOURS : ignorer tout événement hors d'aujourd'hui ou demain
+              const state = e.status?.type?.state || 'pre';
+              const isLiveState = (state === 'in');
+
+              // FILTRE STRICT 2 JOURS : ignorer tout événement hors d'aujourd'hui ou demain (sauf si actuellement en direct)
               const eventDateObj = new Date(e.date);
               const eventTime = eventDateObj.getTime();
-              if (isNaN(eventTime) || eventTime < startWindow || eventTime > endWindow) {
+              if (!isLiveState && (isNaN(eventTime) || eventTime < startWindow || eventTime > endWindow)) {
                 return; // Exclus car au-delà des 2 jours
               }
 
@@ -2499,7 +2504,10 @@
               const away = comp.competitors?.find(c => c.homeAway === 'away') || comp.competitors?.[1];
               if (!home || !away) return;
 
-              const state = e.status?.type?.state || 'pre';
+              const homeName = home.team?.displayName || home.athlete?.displayName || 'Équipe locale';
+              const awayName = away.team?.displayName || away.athlete?.displayName || 'Équipe visiteuse';
+              const teamsText = `${awayName} contre ${homeName}`;
+
               const detail = e.status?.type?.detail || e.status?.type?.shortDetail || 'Programmé';
 
               let statusLabel = detail;
@@ -2514,7 +2522,7 @@
                 statusLabel = `⏱️ ${detail}`;
               }
 
-              const isToday = (eventDateObj.getDate() === now.getDate() && eventDateObj.getMonth() === now.getMonth());
+              const isToday = (eventDateObj.getDate() === now.getDate() && eventDateObj.getMonth() === now.getMonth()) || (eventDateObj < now && isLiveState);
               const dayTag = isToday ? 'today' : 'tomorrow';
               const formattedTime = eventDateObj.toLocaleTimeString('fr-CA', { hour: '2-digit', minute: '2-digit' });
 
@@ -2526,10 +2534,11 @@
                 sport: lg.key,
                 sportLabel: lg.label,
                 badgeClass: lg.badge,
-                homeTeam: home.team?.displayName || 'Équipe locale',
+                teams: teamsText,
+                homeTeam: homeName,
                 homeScore: home.score || (state === 'pre' ? '-' : '0'),
                 homeLogo: home.team?.logo || 'https://a.espncdn.com/i/teamlogos/default-team-logo-500.png',
-                awayTeam: away.team?.displayName || 'Équipe visiteuse',
+                awayTeam: awayName,
                 awayScore: away.score || (state === 'pre' ? '-' : '0'),
                 awayLogo: away.team?.logo || 'https://a.espncdn.com/i/teamlogos/default-team-logo-500.png',
                 status: statusClass,
@@ -2540,6 +2549,7 @@
                 dayTag: dayTag,
                 timeFormatted: formattedTime,
                 hasBroadcastChannel: Boolean(broadcastInfo && broadcastInfo.hasChannel),
+                broadcastChannelId: broadcastInfo?.channelId || '',
                 broadcastChannelName: broadcastInfo?.channelName || 'Non diffusé',
                 broadcastChannelUrl: broadcastInfo?.channelUrl || null,
                 broadcastChannelSummary: broadcastInfo?.allChannelsSummary || 'Non disponible au guide'
@@ -2581,142 +2591,163 @@
       renderRealEvents();
     }
 
+    function openLivePlayerForMatch(matchId) {
+      const m = realMatchesData.find(x => String(x.id) === String(matchId));
+      if (!m) return;
+      const gameTitle = m.teams || `${m.awayTeam} vs ${m.homeTeam}`;
+      openLivePlayer(m.broadcastChannelId || '', m.broadcastChannelName, m.broadcastChannelUrl, gameTitle);
+    }
+
     function renderRealEvents() {
       const container = document.getElementById('events-grid');
-      const filtered = realMatchesData.filter(m => {
-        const matchesSport = (activeSportFilter === 'all' || m.sport === activeSportFilter);
-        const matchesDay = (activeDayFilter === 'all' || m.dayTag === activeDayFilter);
-        const matchesState = (activeStateFilter === 'all' || m.status === activeStateFilter);
-        const matchesSearch = 
-          m.homeTeam.toLowerCase().includes(activeSearchQuery) ||
-          m.awayTeam.toLowerCase().includes(activeSearchQuery) ||
-          (m.broadcastChannelSummary && m.broadcastChannelSummary.toLowerCase().includes(activeSearchQuery)) ||
-          (m.broadcastChannelName && m.broadcastChannelName.toLowerCase().includes(activeSearchQuery)) ||
-          m.venue.toLowerCase().includes(activeSearchQuery);
-        return matchesSport && matchesDay && matchesState && matchesSearch;
-      });
+      if (!container) return;
 
-      if (filtered.length === 0) {
-        container.innerHTML = `
-          <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--text-dim);">
-            <p style="font-size: 1.5rem; margin-bottom: 8px;">🔍 Aucun match dans cette période (2 jours max)</p>
-            <p style="font-size: 0.95rem;">Modifie les filtres ci-dessus ou sélectionne un autre sport.</p>
-          </div>
-        `;
-        return;
-      }
+      try {
+        const query = (activeSearchQuery || '').toLowerCase().trim();
+        const filtered = realMatchesData.filter(m => {
+          const matchesSport = (activeSportFilter === 'all' || m.sport === activeSportFilter);
+          const matchesDay = (activeDayFilter === 'all' || m.dayTag === activeDayFilter);
+          const matchesState = (activeStateFilter === 'all' || m.status === activeStateFilter);
+          const matchesSearch = !query || 
+            (m.homeTeam && m.homeTeam.toLowerCase().includes(query)) ||
+            (m.awayTeam && m.awayTeam.toLowerCase().includes(query)) ||
+            (m.teams && m.teams.toLowerCase().includes(query)) ||
+            (m.broadcastChannelSummary && m.broadcastChannelSummary.toLowerCase().includes(query)) ||
+            (m.broadcastChannelName && m.broadcastChannelName.toLowerCase().includes(query)) ||
+            (m.venue && m.venue.toLowerCase().includes(query));
+          return matchesSport && matchesDay && matchesState && matchesSearch;
+        });
 
-      const nowTime = Date.now();
+        if (filtered.length === 0) {
+          container.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--text-dim);">
+              <p style="font-size: 1.5rem; margin-bottom: 8px;">🔍 Aucun match dans cette période (2 jours max)</p>
+              <p style="font-size: 0.95rem;">Modifie les filtres ci-dessus ou sélectionne un autre sport.</p>
+            </div>
+          `;
+          return;
+        }
 
-      container.innerHTML = filtered.map(m => {
-        const isLive = m.status === 'live';
-        const isFinal = m.status === 'final';
-        const gameStartTime = new Date(m.date).getTime();
-        const hasReachedMatchTime = (nowTime >= gameStartTime);
+        const nowTime = Date.now();
 
-        let footerContent = '';
-        if (m.hasBroadcastChannel) {
-          // La partie est diffusée sur une chaîne locale vérifiée
-          if ((hasReachedMatchTime || isLive) && !isFinal) {
-            // Rendu à l'heure du match -> Bouton Regarder ACTIF
-            footerContent = `
-              <div class="match-footer">
-                <div class="broadcast-badge">
-                  <span>📺 En direct sur</span>
-                  <span class="channel-pill-tag">${m.broadcastChannelSummary}</span>
+        container.innerHTML = filtered.map(m => {
+          const isLive = m.status === 'live';
+          const isFinal = m.status === 'final';
+          const gameStartTime = new Date(m.date).getTime();
+          const hasReachedMatchTime = (nowTime >= gameStartTime);
+
+          let footerContent = '';
+          if (m.hasBroadcastChannel) {
+            // La partie est diffusée sur une chaîne locale vérifiée
+            if ((hasReachedMatchTime || isLive) && !isFinal) {
+              // Rendu à l'heure du match -> Bouton Regarder ACTIF
+              footerContent = `
+                <div class="match-footer">
+                  <div class="broadcast-badge">
+                    <span>📺 En direct sur</span>
+                    <span class="channel-pill-tag">${m.broadcastChannelSummary}</span>
+                  </div>
+
+                  <button onclick="openLivePlayerForMatch('${m.id}')" class="match-action-btn">
+                    <span>▶ Regarder sur ${m.broadcastChannelName}</span>
+                  </button>
                 </div>
+              `;
+            } else if (isFinal) {
+              // Match terminé
+              footerContent = `
+                <div class="match-footer">
+                  <div class="broadcast-badge">
+                    <span>📺 Était diffusé sur</span>
+                    <span class="channel-pill-tag">${m.broadcastChannelSummary}</span>
+                  </div>
 
-                <button onclick="openLivePlayer('${m.broadcastChannelId || ''}', '${m.broadcastChannelName}', '${m.broadcastChannelUrl}', '${m.teams.replace(/'/g, "\\'")}')" class="match-action-btn">
-                  <span>▶ Regarder sur ${m.broadcastChannelName}</span>
-                </button>
-              </div>
-            `;
-          } else if (isFinal) {
-            // Match terminé
-            footerContent = `
-              <div class="match-footer">
-                <div class="broadcast-badge">
-                  <span>📺 Était diffusé sur</span>
-                  <span class="channel-pill-tag">${m.broadcastChannelSummary}</span>
+                  <div class="match-ended-pill">
+                    <span>✅ Match terminé</span>
+                  </div>
                 </div>
+              `;
+            } else {
+              // Avant l'heure du match -> PAS de bouton regarder, notification d'attente
+              footerContent = `
+                <div class="match-footer">
+                  <div class="broadcast-badge">
+                    <span>📺 Prévu sur</span>
+                    <span class="channel-pill-tag">${m.broadcastChannelSummary}</span>
+                  </div>
 
-                <div class="match-ended-pill">
-                  <span>✅ Match terminé</span>
+                  <div class="match-wait-pill">
+                    <span>⏱️ Bouton disponible à ${m.timeFormatted}</span>
+                  </div>
                 </div>
-              </div>
-            `;
+              `;
+            }
           } else {
-            // Avant l'heure du match -> PAS de bouton regarder, notification d'attente
+            // Aucun poste du guide ne diffuse cette partie -> AUCUN BOUTON REGARDER
             footerContent = `
-              <div class="match-footer">
-                <div class="broadcast-badge">
-                  <span>📺 Prévu sur</span>
-                  <span class="channel-pill-tag">${m.broadcastChannelSummary}</span>
+              <div class="match-footer no-broadcast">
+                <div class="broadcast-badge unavail">
+                  <span>📺 Chaîne locale</span>
+                  <span class="channel-pill-tag unavail">Non disponible au guide</span>
                 </div>
 
-                <div class="match-wait-pill">
-                  <span>⏱️ Bouton disponible à ${m.timeFormatted}</span>
+                <div class="match-na-pill">
+                  <span>Non diffusé</span>
                 </div>
               </div>
             `;
           }
-        } else {
-          // Aucun poste du guide ne diffuse cette partie -> AUCUN BOUTON REGARDER
-          footerContent = `
-            <div class="match-footer no-broadcast">
-              <div class="broadcast-badge unavail">
-                <span>📺 Chaîne locale</span>
-                <span class="channel-pill-tag unavail">Non disponible au guide</span>
+
+          return `
+            <div class="match-card">
+              <div>
+                <div class="match-card-top">
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span class="league-badge ${m.badgeClass}">${m.sportLabel}</span>
+                    <span class="day-badge ${m.dayTag}">${m.isToday ? '☀️ Aujourd\'hui' : '🌙 Demain'} • ${m.timeFormatted}</span>
+                  </div>
+                  <span class="match-status-tag ${m.status}">
+                    ${isLive ? '<span class="live-dot" style="background:#ef4444; width:6px; height:6px;"></span>' : ''}
+                    ${m.statusLabel}
+                  </span>
+                </div>
+
+                <div class="scoreboard">
+                  <div class="team-row">
+                    <div class="team-info">
+                      <img src="${m.awayLogo}" alt="${m.awayTeam}" class="team-logo" onerror="this.src='https://a.espncdn.com/i/teamlogos/default-team-logo-500.png'">
+                      <span class="team-name">${m.awayTeam}</span>
+                    </div>
+                    <div class="team-score">${m.awayScore}</div>
+                  </div>
+
+                  <div class="team-row">
+                    <div class="team-info">
+                      <img src="${m.homeLogo}" alt="${m.homeTeam}" class="team-logo" onerror="this.src='https://a.espncdn.com/i/teamlogos/default-team-logo-500.png'">
+                      <span class="team-name">${m.homeTeam}</span>
+                    </div>
+                    <div class="team-score">${m.homeScore}</div>
+                  </div>
+                </div>
+
+                <div style="font-size: 0.78rem; color: var(--text-dim); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                  <span>📍 ${m.venue}</span>
+                </div>
               </div>
 
-              <div class="match-na-pill">
-                <span>Non diffusé</span>
-              </div>
+              ${footerContent}
             </div>
           `;
-        }
-
-        return `
-          <div class="match-card">
-            <div>
-              <div class="match-card-top">
-                <div style="display: flex; align-items: center; gap: 6px;">
-                  <span class="league-badge ${m.badgeClass}">${m.sportLabel}</span>
-                  <span class="day-badge ${m.dayTag}">${m.isToday ? '☀️ Aujourd\'hui' : '🌙 Demain'} • ${m.timeFormatted}</span>
-                </div>
-                <span class="match-status-tag ${m.status}">
-                  ${isLive ? '<span class="live-dot" style="background:#ef4444; width:6px; height:6px;"></span>' : ''}
-                  ${m.statusLabel}
-                </span>
-              </div>
-
-              <div class="scoreboard">
-                <div class="team-row">
-                  <div class="team-info">
-                    <img src="${m.awayLogo}" alt="${m.awayTeam}" class="team-logo" onerror="this.src='https://a.espncdn.com/i/teamlogos/default-team-logo-500.png'">
-                    <span class="team-name">${m.awayTeam}</span>
-                  </div>
-                  <div class="team-score">${m.awayScore}</div>
-                </div>
-
-                <div class="team-row">
-                  <div class="team-info">
-                    <img src="${m.homeLogo}" alt="${m.homeTeam}" class="team-logo" onerror="this.src='https://a.espncdn.com/i/teamlogos/default-team-logo-500.png'">
-                    <span class="team-name">${m.homeTeam}</span>
-                  </div>
-                  <div class="team-score">${m.homeScore}</div>
-                </div>
-              </div>
-
-              <div style="font-size: 0.78rem; color: var(--text-dim); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
-                <span>📍 ${m.venue}</span>
-              </div>
-            </div>
-
-            ${footerContent}
+        }).join('');
+      } catch (err) {
+        console.error("Erreur renderRealEvents:", err);
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--text-dim);">
+            <p style="font-size: 1.3rem; margin-bottom: 8px;">⚠️ Erreur lors de l'affichage des matchs</p>
+            <p style="font-size: 0.95rem;">Cliquez sur « Actualiser les scores » pour réessayer.</p>
           </div>
         `;
-      }).join('');
+      }
     }
 
     // Filtres par sport
