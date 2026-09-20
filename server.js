@@ -273,6 +273,8 @@ const server = http.createServer((req, res) => {
       if (ext === '.js')   contentType = 'application/javascript; charset=utf-8';
       if (ext === '.svg')  contentType = 'image/svg+xml';
       if (ext === '.png')  contentType = 'image/png';
+      if (ext === '.jpg' || ext === '.jpeg') contentType = 'image/jpeg';
+      if (ext === '.webp') contentType = 'image/webp';
       if (ext === '.ico')  contentType = 'image/x-icon';
       if (ext === '.json') contentType = 'application/json; charset=utf-8';
 

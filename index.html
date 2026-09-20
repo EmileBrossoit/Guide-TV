@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Guide TV Sports & Vrais Matchs en Direct - QC & Canada</title>
+  <link rel="icon" type="image/jpeg" href="logo.jpg">
+  <link rel="apple-touch-icon" href="logo.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -86,13 +88,28 @@
     .brand-icon {
       width: 52px;
       height: 52px;
-      background: linear-gradient(135deg, #ef4444, #1e40af);
       border-radius: 14px;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 26px;
-      box-shadow: 0 8px 24px rgba(239, 68, 68, 0.35);
+      box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4), 0 0 15px rgba(56, 189, 248, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      flex-shrink: 0;
+      background: #020617;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .brand-icon:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 30px rgba(239, 68, 68, 0.55), 0 0 20px rgba(56, 189, 248, 0.35);
+    }
+
+    .brand-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
     .brand-text h1 {
@@ -1504,7 +1521,9 @@
     <!-- Header -->
     <header>
       <div class="brand-group">
-        <div class="brand-icon">🏒</div>
+        <div class="brand-icon">
+          <img src="logo.jpg" alt="Guide Sports Direct">
+        </div>
         <div class="brand-text">
           <h1>Guide Sports Direct</h1>
           <p><span class="live-dot"></span> Grille officielle (15 postes) & Vrais matchs en direct</p>
