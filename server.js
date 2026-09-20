@@ -251,7 +251,16 @@ const server = http.createServer((req, res) => {
 
   // Servir les fichiers statiques
   const relativePath = cleanUrl === '/' ? 'index.html' : cleanUrl.replace(/^\//, '');
-  const filePath = path.join(DIR, relativePath);
+  let filePath = path.join(DIR, relativePath);
+  if (!fs.existsSync(filePath)) {
+    if (relativePath.startsWith('logos/')) {
+      const rootCandidate = path.join(DIR, path.basename(relativePath));
+      if (fs.existsSync(rootCandidate)) filePath = rootCandidate;
+    } else {
+      const logoCandidate = path.join(DIR, 'logos', relativePath);
+      if (fs.existsSync(logoCandidate)) filePath = logoCandidate;
+    }
+  }
 
   fs.readFile(filePath, (err, data) => {
     if (err) {
