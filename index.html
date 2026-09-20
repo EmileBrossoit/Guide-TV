@@ -590,6 +590,8 @@
       align-items: center;
       gap: 4px;
       box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+      border: none;
+      cursor: pointer;
     }
     .btn-watch-direct:hover {
       background: linear-gradient(135deg, #f87171, #ef4444);
@@ -979,6 +981,8 @@
       align-items: center;
       gap: 6px;
       box-shadow: 0 3px 10px rgba(239, 68, 68, 0.35);
+      border: none;
+      cursor: pointer;
       transition: all 0.2s;
     }
 
@@ -1149,6 +1153,246 @@
     .modal-action-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(239, 68, 68, 0.6);
+    }
+
+    /* ========================================================
+       MODAL LECTEUR VIDÉO INTÉGRÉ (MODE CINÉMA SPORT DIRECT)
+       ======================================================== */
+    .player-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(3, 7, 18, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 16px;
+      animation: fadeInOverlay 0.2s ease-out;
+    }
+
+    .player-modal-box {
+      width: 100%;
+      max-width: 1080px;
+      background: #0b1120;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 50px rgba(239, 68, 68, 0.15);
+      display: flex;
+      flex-direction: column;
+      animation: modalScaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalScaleIn {
+      from { opacity: 0; transform: scale(0.96) translateY(10px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .player-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 18px;
+      background: #0f172a;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .player-modal-channel-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .player-modal-logo-wrapper {
+      width: 48px;
+      height: 38px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      flex-shrink: 0;
+    }
+
+    .player-modal-title-col {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .player-modal-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .player-modal-channel-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+
+    .player-live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      border-radius: 20px;
+      padding: 2px 8px;
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    .player-modal-current-show {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 420px;
+    }
+
+    .player-modal-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .server-selector-group {
+      display: flex;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 2px;
+      gap: 2px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .server-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 5px 9px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .server-btn:hover {
+      color: #ffffff;
+    }
+
+    .server-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+    }
+
+    .player-btn-external, .player-btn-fullscreen {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      padding: 6px 11px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .player-btn-external:hover, .player-btn-fullscreen:hover {
+      background: rgba(255, 255, 255, 0.14);
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .player-modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #cbd5e1;
+      font-size: 1rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .player-modal-close:hover {
+      background: rgba(239, 68, 68, 0.85);
+      color: #ffffff;
+      border-color: #ef4444;
+    }
+
+    .player-video-viewport {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 Aspect Ratio */
+      background: #000000;
+      overflow: hidden;
+    }
+
+    .player-video-viewport iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      z-index: 2;
+    }
+
+    .player-loading-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #020617;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      z-index: 1;
+    }
+
+    .player-modal-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 18px;
+      background: #090e1a;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     /* ========================================================
@@ -1419,9 +1663,73 @@
       <h2 class="modal-title" id="m-title">LNH en direct : Canadiens de Montréal vs Sénateurs</h2>
       <p class="modal-desc" id="m-desc">Description de l'émission...</p>
 
-      <a href="#" target="_blank" rel="noopener noreferrer" class="modal-action-btn" id="m-watch-btn">
+      <button class="modal-action-btn" id="m-watch-btn" onclick="openPlayerFromModal()">
         <span>▶ Regarder sur <span id="m-channel-name-btn">RDS</span></span>
-      </a>
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal Lecteur Vidéo Intégré (Cinéma Sports Direct) -->
+  <div class="player-modal-overlay" id="player-modal-overlay" onclick="closePlayerModal(event)">
+    <div class="player-modal-box" onclick="event.stopPropagation()">
+      <div class="player-modal-header">
+        <div class="player-modal-channel-info">
+          <div class="player-modal-logo-wrapper">
+            <img id="p-logo-img" src="" alt="" style="height: 28px; max-width: 48px; object-fit: contain;">
+          </div>
+          <div class="player-modal-title-col">
+            <div class="player-modal-name-row">
+              <span class="player-modal-channel-name" id="p-channel-name">RDS</span>
+              <span class="player-live-badge"><span class="live-dot" style="width:7px; height:7px;"></span> EN DIRECT</span>
+            </div>
+            <div class="player-modal-current-show" id="p-show-title">Chargement du flux...</div>
+          </div>
+        </div>
+
+        <div class="player-modal-actions">
+          <div class="server-selector-group" title="Changer de serveur de diffusion">
+            <button class="server-btn active" id="server-btn-1" onclick="switchPlayerServer('stream')">Serveur 1</button>
+            <button class="server-btn" id="server-btn-2" onclick="switchPlayerServer('cast')">Serveur 2</button>
+            <button class="server-btn" id="server-btn-3" onclick="switchPlayerServer('player')">Serveur 3</button>
+          </div>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="player-btn-external" id="p-external-link" title="Ouvrir dans un onglet externe">
+            🔗 Onglet externe
+          </a>
+          <button class="player-btn-fullscreen" onclick="togglePlayerFullscreen()" title="Plein écran">
+            ⛶ Plein écran
+          </button>
+          <button class="player-modal-close" onclick="closePlayerModal()" title="Fermer le lecteur">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <div class="player-video-viewport" id="player-video-wrapper">
+        <div class="player-loading-placeholder" id="player-loading-indicator">
+          <div class="spinner"></div>
+          <div style="font-weight: 600; color: #f1f5f9; font-size: 0.95rem;">Connexion au flux en direct...</div>
+          <div style="font-size: 0.75rem; color: #94a3b8;">Le lecteur vidéo va se lancer automatiquement</div>
+        </div>
+        <iframe id="player-cinema-iframe" 
+                src="about:blank" 
+                allowfullscreen="true" 
+                webkitallowfullscreen="true" 
+                mozallowfullscreen="true"
+                allow="encrypted-media; autoplay; fullscreen; picture-in-picture" 
+                referrerpolicy="origin">
+        </iframe>
+      </div>
+
+      <div class="player-modal-footer">
+        <div class="player-footer-hint">
+          💡 <strong>Astuce :</strong> Si le flux met du temps à se charger ou coupe, cliquez sur <strong>Serveur 2</strong> ou <strong>Serveur 3</strong> ci-dessus.
+        </div>
+        <div class="player-footer-action">
+          <a href="#" target="_blank" rel="noopener noreferrer" id="p-direct-footer-link" style="color: #38bdf8; text-decoration: none; font-size: 0.75rem;">
+            Ouvrir la page source externe ↗
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -2299,9 +2607,9 @@
                   <span class="channel-pill-tag">${m.broadcastChannelSummary}</span>
                 </div>
 
-                <a href="${m.broadcastChannelUrl}" target="_blank" rel="noopener noreferrer" class="match-action-btn">
+                <button onclick="openLivePlayer('${m.broadcastChannelId || ''}', '${m.broadcastChannelName}', '${m.broadcastChannelUrl}', '${m.teams.replace(/'/g, "\\'")}')" class="match-action-btn">
                   <span>▶ Regarder sur ${m.broadcastChannelName}</span>
-                </a>
+                </button>
               </div>
             `;
           } else if (isFinal) {
@@ -2596,9 +2904,9 @@
                 <span class="channel-cell-cat">${ch.sublabel}</span>
               </div>
             </div>
-            <a href="${ch.directUrl}" target="_blank" rel="noopener noreferrer" class="btn-watch-direct" title="Lancer le direct de ${ch.name}">
+            <button onclick="openLivePlayer('${ch.id}', '${ch.name}', '${ch.directUrl}')" class="btn-watch-direct" title="Lancer le lecteur direct de ${ch.name}">
               ▶ Regarder
-            </a>
+            </button>
           </div>
         `;
 
@@ -2635,11 +2943,15 @@
     setInterval(updateClock, 1000);
     updateClock();
 
+    let currentModalChannelId = null;
+
     function openModal(channelId, start, end) {
       const ch = SPORTS_CHANNELS.find(c => c.id === channelId);
       if (!ch) return;
       const show = ch.schedule.find(s => s.start === start && s.end === end);
       if (!show) return;
+
+      currentModalChannelId = channelId;
 
       document.getElementById('m-logo-img').src = ch.logoImg;
       document.getElementById('m-logo-img').alt = ch.name;
@@ -2647,9 +2959,6 @@
       document.getElementById('m-time-tag').textContent = `${show.start} à ${show.end} (${show.cat})`;
       document.getElementById('m-title').textContent = show.title;
       document.getElementById('m-desc').textContent = show.desc;
-
-      const watchBtn = document.getElementById('m-watch-btn');
-      watchBtn.href = ch.directUrl;
       document.getElementById('m-channel-name-btn').textContent = ch.name;
 
       document.getElementById('modal-overlay').style.display = 'flex';
@@ -2658,6 +2967,136 @@
     function closeModal() {
       document.getElementById('modal-overlay').style.display = 'none';
     }
+
+    function openPlayerFromModal() {
+      const ch = SPORTS_CHANNELS.find(c => c.id === currentModalChannelId);
+      const title = document.getElementById('m-title')?.textContent || '';
+      closeModal();
+      if (ch) {
+        openLivePlayer(ch.id, ch.name, ch.directUrl, title);
+      }
+    }
+
+    // ========================================================
+    // CONTRÔLEUR DU LECTEUR VIDÉO INTÉGRÉ (CINÉMA MODE)
+    // ========================================================
+    let currentPlayerStreamId = null;
+    let currentExternalUrl = null;
+    let currentServerType = 'stream'; // 'stream', 'cast', 'player'
+
+    function getStreamEmbedUrl(streamId, type = 'stream') {
+      if (streamId) return `https://dlive.sx/${type}/stream-${streamId}.php`;
+      return currentExternalUrl || 'about:blank';
+    }
+
+    function openLivePlayer(channelId, channelName, directUrl, gameTitle = '') {
+      const ch = SPORTS_CHANNELS.find(c => c.id === channelId);
+      const name = channelName || (ch ? ch.name : 'Chaîne Sport');
+      const logo = ch ? ch.logoImg : '';
+      const url = directUrl || (ch ? ch.directUrl : '');
+
+      const idMatch = url.match(/(?:id=|stream-)(\d+)/);
+      const streamId = idMatch ? idMatch[1] : null;
+
+      currentPlayerStreamId = streamId;
+      currentExternalUrl = url;
+      currentServerType = 'stream';
+
+      document.getElementById('p-channel-name').textContent = name;
+      const pLogo = document.getElementById('p-logo-img');
+      if (pLogo && logo) {
+        pLogo.src = logo;
+        pLogo.alt = name;
+        pLogo.style.display = 'block';
+      } else if (pLogo) {
+        pLogo.style.display = 'none';
+      }
+
+      let showDisplayTitle = gameTitle;
+      if (!showDisplayTitle && ch && ch.schedule) {
+        const nowMin = getCurrentMinutesOffset();
+        const currentShow = ch.schedule.find(s => {
+          const startMin = timeToMinutes(s.start);
+          const endMin = timeToMinutes(s.end);
+          return (nowMin >= startMin && nowMin < endMin);
+        });
+        if (currentShow) {
+          showDisplayTitle = `${currentShow.title} (${currentShow.start} - ${currentShow.end})`;
+        }
+      }
+      document.getElementById('p-show-title').textContent = showDisplayTitle || 'Diffusion en direct';
+
+      const extLink = document.getElementById('p-external-link');
+      if (extLink) extLink.href = url;
+      const directFootLink = document.getElementById('p-direct-footer-link');
+      if (directFootLink) directFootLink.href = url;
+
+      updateServerButtonStates();
+      loadIframeStream();
+
+      const modal = document.getElementById('player-modal-overlay');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function loadIframeStream() {
+      const iframe = document.getElementById('player-cinema-iframe');
+      const loading = document.getElementById('player-loading-indicator');
+      if (!iframe) return;
+
+      if (loading) loading.style.display = 'flex';
+
+      const embedUrl = getStreamEmbedUrl(currentPlayerStreamId, currentServerType);
+      iframe.src = embedUrl;
+
+      iframe.onload = () => {
+        setTimeout(() => {
+          if (loading) loading.style.display = 'none';
+        }, 1200);
+      };
+    }
+
+    function switchPlayerServer(serverType) {
+      currentServerType = serverType;
+      updateServerButtonStates();
+      loadIframeStream();
+    }
+
+    function updateServerButtonStates() {
+      ['stream', 'cast', 'player'].forEach((type, idx) => {
+        const btn = document.getElementById(`server-btn-${idx + 1}`);
+        if (btn) {
+          btn.classList.toggle('active', currentServerType === type);
+        }
+      });
+    }
+
+    function closePlayerModal(e) {
+      if (e && e.target && e.target.id !== 'player-modal-overlay' && !e.target.classList.contains('player-modal-close')) {
+        return;
+      }
+      const modal = document.getElementById('player-modal-overlay');
+      if (modal) modal.style.display = 'none';
+      const iframe = document.getElementById('player-cinema-iframe');
+      if (iframe) iframe.src = 'about:blank';
+    }
+
+    function togglePlayerFullscreen() {
+      const wrapper = document.getElementById('player-video-wrapper');
+      if (!wrapper) return;
+      if (!document.fullscreenElement) {
+        if (wrapper.requestFullscreen) wrapper.requestFullscreen();
+        else if (wrapper.webkitRequestFullscreen) wrapper.webkitRequestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closePlayerModal();
+        closeModal();
+      }
+    });
 
     let currentFilter = 'all';
     let currentSearchTerm = '';
