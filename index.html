@@ -1344,6 +1344,93 @@
       border-color: rgba(255, 255, 255, 0.25);
     }
 
+    .player-btn-direct-popup {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      padding: 6px 13px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.45);
+      transition: all 0.2s ease;
+    }
+    .player-btn-direct-popup:hover {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.65);
+      color: #ffffff;
+    }
+
+    .player-csp-notice {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      z-index: 50;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), 0 0 16px rgba(245, 158, 11, 0.15);
+      border-radius: 10px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      backdrop-filter: blur(10px);
+      transition: opacity 0.2s ease;
+    }
+    .csp-notice-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fde68a;
+      font-size: 0.78rem;
+      font-weight: 500;
+    }
+    .csp-notice-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .csp-btn-fix {
+      background: #ef4444;
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+    .csp-btn-fix:hover {
+      background: #dc2626;
+      transform: translateY(-1px);
+    }
+    .csp-btn-server2 {
+      background: rgba(255, 255, 255, 0.1);
+      color: #f1f5f9;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .csp-btn-server2:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
     .player-btn-back {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.16);
@@ -1788,6 +1875,9 @@
             <button class="server-btn" id="server-btn-2" onclick="switchPlayerServer('cast')">Serveur 2</button>
             <button class="server-btn" id="server-btn-3" onclick="switchPlayerServer('player')">Serveur 3</button>
           </div>
+          <button class="player-btn-direct-popup" onclick="openDirectPopup()" title="Ouvrir le flux officiel en direct sans aucun blocage de connexion">
+            🚀 Lecteur direct sans blocage
+          </button>
           <a href="#" target="_blank" rel="noopener noreferrer" class="player-btn-external" id="p-external-link" title="Ouvrir dans un onglet externe">
             🔗 Onglet externe
           </a>
@@ -1806,6 +1896,20 @@
           <span>✕</span>
           <span>Quitter</span>
         </button>
+        <div class="player-csp-notice" id="p-csp-notice">
+          <div class="csp-notice-left">
+            <span>🛡️</span>
+            <span>Si le message <strong>« daddyliveplayer.st n'autorise pas la connexion »</strong> s'affiche :</span>
+          </div>
+          <div class="csp-notice-actions">
+            <button class="csp-btn-fix" onclick="openDirectPopup()">
+              🚀 Ouvrir le lecteur direct sans blocage ↗
+            </button>
+            <button class="csp-btn-server2" onclick="switchPlayerServer('cast')">
+              Essayer Serveur 2 (Cast)
+            </button>
+          </div>
+        </div>
         <div class="player-loading-placeholder" id="player-loading-indicator">
           <div class="spinner"></div>
           <div style="font-weight: 600; color: #f1f5f9; font-size: 0.95rem;">Connexion au flux en direct...</div>
@@ -1815,8 +1919,10 @@
                 src="about:blank" 
                 allowfullscreen="true" 
                 webkitallowfullscreen="true" 
-                mozallowfullscreen="true"
-                allow="encrypted-media; autoplay; fullscreen; picture-in-picture" 
+                mozallowfullscreen="true" 
+                allow="encrypted-media; autoplay; fullscreen; picture-in-picture">
+        </iframe>
+      </div>            allow="encrypted-media; autoplay; fullscreen; picture-in-picture" 
                 referrerpolicy="origin">
         </iframe>
       </div>
@@ -3231,9 +3337,34 @@
       };
     }
 
+    function openDirectPopup() {
+      const streamId = currentPlayerStreamId;
+      const url = currentExternalUrl || (streamId ? `https://dlive.sx/watch.php?id=${streamId}` : '');
+      if (!url) return;
+      const width = Math.min(1180, window.screen.availWidth - 40);
+      const height = Math.min(720, window.screen.availHeight - 40);
+      const left = Math.max(0, (window.screen.availWidth - width) / 2);
+      const top = Math.max(0, (window.screen.availHeight - height) / 2);
+
+      const win = window.open(
+        url,
+        `LiveStream_${streamId || 'direct'}`,
+        `width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=no`
+      );
+      if (win) {
+        win.focus();
+      } else {
+        window.open(url, '_blank');
+      }
+    }
+
     function switchPlayerServer(serverType) {
       currentServerType = serverType;
       updateServerButtonStates();
+      const cspNotice = document.getElementById('p-csp-notice');
+      if (cspNotice) {
+        cspNotice.style.display = (serverType === 'stream') ? 'flex' : 'none';
+      }
       loadIframeStream();
     }
 
