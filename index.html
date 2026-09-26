@@ -1344,26 +1344,82 @@
       border-color: rgba(255, 255, 255, 0.25);
     }
 
-    .player-modal-close {
-      width: 32px;
-      height: 32px;
+    .player-btn-back {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #f1f5f9;
+      padding: 6px 12px;
       border-radius: 8px;
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #cbd5e1;
-      font-size: 1rem;
-      font-weight: bold;
-      display: flex;
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: inline-flex;
       align-items: center;
-      justify-content: center;
+      gap: 6px;
       cursor: pointer;
       transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .player-btn-back:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.35);
+      color: #ffffff;
+      transform: translateX(-2px);
+    }
+
+    .player-modal-close {
+      height: 34px;
+      padding: 0 14px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.22), rgba(220, 38, 38, 0.35));
+      border: 1px solid rgba(239, 68, 68, 0.55);
+      color: #fee2e2;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.25);
     }
 
     .player-modal-close:hover {
-      background: rgba(239, 68, 68, 0.85);
+      background: linear-gradient(135deg, #ef4444, #dc2626);
       color: #ffffff;
       border-color: #ef4444;
+      transform: scale(1.04);
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.55);
+    }
+
+    .player-viewport-close-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 25;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+      padding: 7px 14px;
+      border-radius: 9px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.65);
+    }
+
+    .player-viewport-close-btn:hover {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      border-color: #ef4444;
+      transform: scale(1.05);
+      box-shadow: 0 4px 18px rgba(239, 68, 68, 0.65);
     }
 
     .player-video-viewport {
@@ -1507,6 +1563,23 @@
       }
       .events-grid {
         grid-template-columns: 1fr;
+      }
+      .player-modal-overlay {
+        padding: 6px;
+      }
+      .player-modal-header {
+        padding: 8px 10px;
+        gap: 8px;
+      }
+      .player-btn-back, .player-modal-close {
+        padding: 5px 9px;
+        font-size: 0.75rem;
+      }
+      .player-viewport-close-btn {
+        top: 8px;
+        right: 8px;
+        padding: 5px 10px;
+        font-size: 0.75rem;
       }
     }
   </style>
@@ -1693,6 +1766,10 @@
     <div class="player-modal-box" onclick="event.stopPropagation()">
       <div class="player-modal-header">
         <div class="player-modal-channel-info">
+          <button class="player-btn-back" onclick="closePlayerModal()" title="Retour au menu principal">
+            <span>←</span>
+            <span>Menu principal</span>
+          </button>
           <div class="player-modal-logo-wrapper">
             <img id="p-logo-img" src="" alt="" style="height: 28px; max-width: 48px; object-fit: contain;">
           </div>
@@ -1717,13 +1794,18 @@
           <button class="player-btn-fullscreen" onclick="togglePlayerFullscreen()" title="Plein écran">
             ⛶ Plein écran
           </button>
-          <button class="player-modal-close" onclick="closePlayerModal()" title="Fermer le lecteur">
-            ✕
+          <button class="player-modal-close" onclick="closePlayerModal()" title="Fermer le lecteur et retourner au menu principal">
+            <span>✕</span>
+            <span>Fermer</span>
           </button>
         </div>
       </div>
 
       <div class="player-video-viewport" id="player-video-wrapper">
+        <button class="player-viewport-close-btn" onclick="closePlayerModal()" title="Fermer le lecteur et retourner au menu principal">
+          <span>✕</span>
+          <span>Quitter</span>
+        </button>
         <div class="player-loading-placeholder" id="player-loading-indicator">
           <div class="spinner"></div>
           <div style="font-weight: 600; color: #f1f5f9; font-size: 0.95rem;">Connexion au flux en direct...</div>
@@ -3165,8 +3247,12 @@
     }
 
     function closePlayerModal(e) {
-      if (e && e.target && e.target.id !== 'player-modal-overlay' && !e.target.classList.contains('player-modal-close')) {
-        return;
+      if (e) {
+        const isBackdrop = (e.target && e.target.id === 'player-modal-overlay');
+        const isCloseTrigger = (e.target && e.target.closest && e.target.closest('.player-modal-close, .player-btn-back, .player-viewport-close-btn'));
+        if (!isBackdrop && !isCloseTrigger) {
+          return;
+        }
       }
       const modal = document.getElementById('player-modal-overlay');
       if (modal) modal.style.display = 'none';
